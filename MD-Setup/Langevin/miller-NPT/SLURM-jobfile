@@ -1,0 +1,52 @@
+#!/bin/bash
+
+#SBATCH -J my_job_name           # job name
+#SBATCH -o amber.out       # output and error file name (%j expands to jobID)
+#SBATCH -n 1              # total number of mpi tasks requested
+#SBATCH -p gpu     # queue (partition) -- normal, development, etc.
+#SBATCH -t 11:59:59        # run time (hh:mm:ss)
+
+#date
+
+cd $SLURM_SUBMIT_DIR
+
+#Set up the environment
+module load cuda/7.0
+export CUDA_HOME=$TACC_CUDA_DIR
+module load netcdf/4.2.1.1
+
+# Set up Amber
+export AMBERHOME=/wherever/my/amber/folder/is
+
+
+# run the program
+$AMBERHOME/bin/pmemd.cuda -O -i min1.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat.inpcrd -ref WT_protein_system_wat.inpcrd -o WT_protein_system_wat_min1.mdout -r WT_protein_system_wat_min1.rst7 -x WT_protein_system_wat_min1.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i min2.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_min1.rst7 -ref WT_protein_system_wat_min1.rst7 -o WT_protein_system_wat_min2.mdout -r WT_protein_system_wat_min2.rst7 -x WT_protein_system_wat_min2.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i min3.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_min2.rst7 -ref WT_protein_system_wat_min2.rst7 -o WT_protein_system_wat_min3.mdout -r WT_protein_system_wat_min3.rst7 -x WT_protein_system_wat_min3.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i min4.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_min3.rst7 -ref WT_protein_system_wat_min3.rst7 -o WT_protein_system_wat_min4.mdout -r WT_protein_system_wat_min4.rst7 -x WT_protein_system_wat_min4.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i min5.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_min4.rst7 -ref WT_protein_system_wat_min4.rst7 -o WT_protein_system_wat_min5.mdout -r WT_protein_system_wat_min5.rst7 -x WT_protein_system_wat_min5.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i min6.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_min5.rst7 -ref WT_protein_system_wat_min5.rst7 -o WT_protein_system_wat_min6.mdout -r WT_protein_system_wat_min6.rst7 -x WT_protein_system_wat_min6.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i min7.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_min6.rst7 -ref WT_protein_system_wat_min6.rst7 -o WT_protein_system_wat_min7.mdout -r WT_protein_system_wat_min7.rst7 -x WT_protein_system_wat_min7.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i heat.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_min7.rst7 -ref WT_protein_system_wat_min7.rst7 -o WT_protein_system_wat_heat.mdout -r WT_protein_system_wat_heat.rst7 -x WT_protein_system_wat_heat.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i eq1.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_heat.rst7 -ref WT_protein_system_wat_heat.rst7 -o WT_protein_system_wat_eq1.mdout -r WT_protein_system_wat_eq1.rst7 -x WT_protein_system_wat_eq1.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i eq2.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_eq1.rst7 -ref WT_protein_system_wat_eq1.rst7 -o WT_protein_system_wat_eq1.mdout -r WT_protein_system_wat_eq2.rst7 -x WT_protein_system_wat_eq2.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i eq3.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_eq2.rst7 -ref WT_protein_system_wat_eq2.rst7 -o WT_protein_system_wat_eq3.mdout -r WT_protein_system_wat_eq3.rst7 -x WT_protein_system_wat_eq3.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i eq4.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_eq3.rst7 -ref WT_protein_system_wat_eq3.rst7 -o WT_protein_system_wat_eq4.mdout -r WT_protein_system_wat_eq4.rst7 -x WT_protein_system_wat_eq4.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i eq5.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_eq4.rst7 -ref WT_protein_system_wat_eq4.rst7 -o WT_protein_system_wat_eq5.mdout -r WT_protein_system_wat_eq5.rst7 -x WT_protein_system_wat_eq5.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i eq6.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_eq5.rst7 -ref WT_protein_system_wat_eq5.rst7 -o WT_protein_system_wat_eq6.mdout -r WT_protein_system_wat_eq6.rst7 -x WT_protein_system_wat_eq6.nc
+
+$AMBERHOME/bin/pmemd.cuda -O -i eq7.mdin -p WT_protein_system_wat.prmtop -c WT_protein_system_wat_eq6.rst7 -ref WT_protein_system_wat_eq6.rst7 -o WT_protein_system_wat_eq7.mdout -r WT_protein_system_wat_eq7.rst7 -x WT_protein_system_wat_eq7.nc
+

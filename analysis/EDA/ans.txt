@@ -1,0 +1,2 @@
+EDA_new.inp
+WT_protein_system_wat.prmtop

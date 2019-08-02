@@ -1,0 +1,35 @@
+System Constant volume  constraints on protein + active site
+ &cntrl
+  ntx=7,        irest=1,
+  nsnb=1,
+  ntpr=100,       ntwx=1000,     ntwv=00,
+  nstlim=100000,   t=0.00,        dt=0.00100,
+  ntc = 2, ntf = 2,
+  ntb    = 1,
+  iwrap = 1,
+  ntt=1, temp0=010.0, tempi=010.0, tautp=0.001, vlimit=20.0,
+  ntr    = 1,
+  cut    = 09.0,
+  nmropt=1
+ /
+ &wt type='TEMP0', istep1=00000, istep2=05000, value1=000., value2=010.,  &end
+ &wt type='TEMP0', istep1=05001, istep2=10000, value1=010., value2=020.,  &end
+ &wt type='TEMP0', istep1=10001, istep2=20000, value1=020., value2=050.,  &end
+ &wt type='TEMP0', istep1=20001, istep2=30000, value1=050., value2=100.,  &end
+ &wt type='TEMP0', istep1=30001, istep2=40000, value1=100., value2=150.,  &end
+ &wt type='TEMP0', istep1=40001, istep2=50000, value1=150., value2=200.,  &end
+ &wt type='TEMP0', istep1=50001, istep2=60000, value1=200., value2=250.,  &end
+ &wt type='TEMP0', istep1=60001, istep2=70000, value1=250., value2=300.,  &end
+ &wt type='TEMP0', istep1=70001, istep2=80000, value1=300., value2=325.,  &end
+ &wt type='TEMP0', istep1=80001,istep2=100000, value1=325., value2=300.,  &end
+ &wt type='END'  &end
+Hold protein fixed
+500.0
+RES 1 430
+500.0
+RES 431 450
+500.0
+RES 451 455
+END
+END
+

@@ -1,0 +1,12 @@
+Minimization to relax initial bad contacts, explicit solvent
+ &cntrl
+   imin=1,
+   ncyc=1000,
+   maxcyc=5000,
+   ntpr=50,
+   cut=8,
+   iwrap=1,
+   ntr=1,
+   restraint_wt=2.0,
+   restraintmask='!@H=',
+ /

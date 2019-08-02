@@ -1,0 +1,18 @@
+Explicit solvent initial heating mdin
+ &cntrl
+   imin=0, irest=0, ntx=1,
+   ntpr=50000, ntwx=50000, ntwr=50000, nstlim=1000000,
+   dt=0.002, ntt=3, gamma_ln=5.0, ig=-1,
+   ntc=2, ntf=2, cut=8, ntb=1, ntp=0,
+   iwrap=1, ioutfm=1, nmropt=1,
+   ntr=1, restraint_wt=10, restraintmask='!@H='
+ /
+ &wt
+   TYPE='TEMP0', ISTEP1=0, ISTEP2=100000,
+   VALUE1=10.0, VALUE2=100.0,
+ /
+ &wt
+   TYPE='TEMP0', ISTEP1=100001, ISTEP2=500000,
+   VALUE1=100.0, VALUE2=300.0,
+ /
+ &wt TYPE='END' /

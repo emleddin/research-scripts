@@ -1,0 +1,29 @@
+#!/bin/bash
+
+#SBATCH -J WT_protein_system    # name of job in queue
+#SBATCH -o Sample_job.o%j       # output file (%j appends job name)
+#SBATCH -p public               # partition
+#SBATCH --qos general           # quality of service
+#SBATCH --ntasks=1              # Number of nodes
+#SBATCH --gres=gpu:2            # 2 GPUs
+#SBATCH -t 12:00:00             # Wallclock time
+
+### Loading modules
+module load amber/16-cuda-mpi
+
+e=0
+f=1
+
+while [ $f -lt 101 ]; do
+
+$AMBERHOME/bin/pmemd.cuda -O -i mdin.4 \
+-o WT_protein_system_wat_md$f.out \
+-p WT_protein_system_wat.prmtop \
+-c WT_protein_system_wat_md$e.rst \
+-r WT_protein_system_wat_md$f.rst \
+-x WT_protein_system_wat_md$f.mdcrd \
+-ref WT_protein_system_wat_md$e.rst
+
+e=$[$e+1]
+f=$[$f+1]
+done
