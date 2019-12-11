@@ -4,7 +4,12 @@ import numpy as np
 import pandas as pd
 import re
 
+## Input Files
 tinkerlog="my_tinker_log_file.out"
+#tl2="my_tinker_log_file_2.out"
+#tl3="my_tinker_log_file_3.out"
+#tl4="my_tinker_log_file_4.out"
+
 outfile="total_energy.dat"
 
 #energy_lines='pot_kin.dat'
@@ -55,5 +60,17 @@ def calculate_TE(df, outfile):
 
 
 df = read_log(tinkerlog)
+#df1 = read_log(tinkerlog)
+
+## Add in replicates here
+#df2 = read_log(tl2)
+#df3 = read_log(tl3)
+#df4 = read_log(tl4)
+
+## Make a massive dataset and 
+#df_all = df1.append(df2).append(df3).append(df4)
+#df_all = df_all.reset_index()
+
 energies = calculate_TE(df, outfile)
+#energies = calculate_TE(df_all, outfile)
 # print(df)
