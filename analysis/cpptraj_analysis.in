@@ -1,11 +1,21 @@
 trajin WT_protein_system_1-200.cdf
 autoimage
 rms first out test_rms.dat :1-476 byres
-matrix correl name corrpath out WT_protein_system_matrix_correl.dat :1-476 byres
-analyze matrix corrpath out WT_protein_system_matrxcorr.dat
-diagmatrix corrpath out WT_protein_system_evecs.dat vecs 100 nmwiz nmwizvecs 100 nmwizfile WT_protein_system_100.nmd
-hbond out WT_protein_system_hbond.dat dist 3.0 avgout WT_protein_system_hbond_avg.dat
+
+## Get for correlation matrix (evecs = eigenvectors)
+matrix out WT-5hmC_r1_corr_mat.dat name corr_mat byres :1-476 correl
+
+## Get for normal modes
+matrix out WT_protein_system_covar_mat.dat name norm_mode :1-476 covar
+diagmatrix norm_mode out WT_protein_system_evecs.out vecs 100 reduce \
+ nmwiz nmwizvecs 100 nmwizfile WT_protein_system_100.nmd nmwizmask :1-476
+ 
+hbond out WT_protein_system_hbond.dat dist 3.0 \
+ avgout WT_protein_system_hbond_avg.dat
+
 rms first out WT_protein_system_total_bb_rms.dat :1-476@CA,P,O3’,O5’,C3’,C4’,C5’
-rmsd :1-476 first perres perresavg range 1-476 perresout WT_protein_system_rmsd_byres.dat
+rmsd :1-476 first perres perresavg range 1-476 \
+ perresout WT_protein_system_rmsd_byres.dat
+
 atomicfluct :1-476 out WT_protein_system_rmsf_byres.dat byres
 distance :476@PA :457@O3’ out dist_PO_WT_protein_system.dat
