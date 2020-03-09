@@ -9,7 +9,7 @@
 module load intel/17.0
 
 ##Access the folder where the files are
-cd /home/euid123/path/to/files
+cd $PBS_O_WORKDIR
 
 ##Compile the EDA program
 ifort Residue_E_Decomp_07_15.f90 -o Residue_E_Decomp_07_15.x
