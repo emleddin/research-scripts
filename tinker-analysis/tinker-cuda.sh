@@ -47,10 +47,10 @@ while [ $e -lt 21 ]; do
 dynamic_omm ${xyz}_${e} -k $key $md $ts $int $sim $temp $GPU > prod$e.out
 
 ## Resave the arc file (otherwise overwritten)
-mv ${arc}.arc ${arc}.arc_${e}
+mv ${arc}.arc ${arc}_${e}.arc
 
 ## Save the next input XYZ
-tail -n ${linenumber} ${arc}.arc_${e} > ${xyz}_${f}
+tail -n ${linenumber} ${arc}_${e}.arc > ${xyz}_${f}
 
 e=$[$e+1]
 f=$[$f+1]
