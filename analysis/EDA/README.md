@@ -35,3 +35,13 @@ The `ROI` (residue of interest) selects every other residue with that residue.
 If a SNP is being investigated, the `ROI` should likely be the SNP position.
 Because of the inability to truly separated bonded and non-bonded interactions,
 the two residues directly next to the `ROI` are set to zero.
+
+### `rmagic-EDA-avg-diffs.r`
+This script finds the difference between two files of averages obtained through
+`rmagic-EDA-avg.r`. The `X_val` variable should be the same as the `ROI` in
+that script.
+
+### `chimeraprint.sh`
+This script can be used to map differences in the Coulomb and van der Waals
+energies onto the protein structure using Chimera.
+It calls the file created using `rmagic-EDA-avg-diffs.r`.
