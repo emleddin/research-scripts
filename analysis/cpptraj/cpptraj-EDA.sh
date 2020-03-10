@@ -4,10 +4,10 @@
 #PBS -j oe
 #PBS -r n
 #PBS -o err.error
-#PBS -N WT_protein_sys_cpp1
+#PBS -N WT_protein_sys_cppEDA
 
 prmfile=WT_protein_system_wat.prmtop
-cppfile=cpptraj_strip.in
+cppfile=cpptraj-EDA-nas.in
 
 cd $PBS_O_WORKDIR
 
