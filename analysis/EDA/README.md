@@ -41,6 +41,15 @@ This script finds the difference between two files of averages obtained through
 `rmagic-EDA-avg.r`. The `X_val` variable should be the same as the `ROI` in
 that script.
 
+### `rmagic-EDA-single-run.r`
+The script relies on the `data.table` and `tidyverse` packages to run.
+The `ROI` (residue of interest) selects every other residue with that residue.
+If a SNP is being investigated, the `ROI` should likely be the SNP position.
+Because of the inability to truly separated bonded and non-bonded interactions,
+the two residues directly next to the `ROI` are set to zero.
+This script is for a single run (so only 1 set of fort.803 and fort.806 files, 
+NOT for replicates that need to be averaged).
+
 ### `chimeraprint.sh`
 This script can be used to map differences in the Coulomb and van der Waals
 energies onto the protein structure using Chimera.
