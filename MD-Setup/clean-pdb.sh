@@ -10,6 +10,7 @@ grep -e '^ATOM\|^HETATM\|^TER\|^END' $thing > $thing_clean
 ## The remainder will only act on lines containing the specified info
 
 ## Remove any B chain lines
+## OSX needs to be sed -i "" BLAH to work
 sed -i '/BALA/d' $thing_clean
 sed -i '/BARG/d' $thing_clean
 sed -i '/BASN/d' $thing_clean
