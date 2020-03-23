@@ -19,8 +19,10 @@ arc=`echo "$xyz" | cut -d'.' -f1`
 
 ## natom + 2 = linenumbers
 ## read trims whitespace/carriage returns of first line
+## natom cut processes number when title present
 read -r var < ${xyz}
-linenumber=$((var+2))
+natom=`echo "$var" | cut -d' ' -f1`
+linenumber=$((natom+2))
 
 ## md = MD steps
 ## ts = timestep in fs
@@ -39,7 +41,10 @@ e=1
 f=2
 
 ## Copy the first one for looping
-cp $xyz ${xyz}_${e}
+if [$e -eq 1]
+then
+    cp $xyz ${xyz}_${e}
+fi
 
 ## 500 ps = 0.5 ns = 1 file; 20 files is 10 ns
 while [ $e -lt 21 ]; do
