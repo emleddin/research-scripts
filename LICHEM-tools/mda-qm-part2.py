@@ -73,6 +73,32 @@ for reading.".format(int(total_QM), len(all_QM)))
     #
     return all_QM
 
+def load_XYZ(lichem_in_xyz):
+    """
+    Load in the LICHEM XYZ.
+
+    Parameters
+    ----------
+    lichem_in_xyz: str
+        The path to/name of the optimized LICHEM XYZ file.
+
+    Returns
+    -------
+    system : MDAnalysis.core.universe.Universe
+        The LICHEM XYZ.
+    """
+    system = mda.Universe(lichem_in_xyz, format="XYZ", dt=1.0, in_memory=True)
+    # mda.coordinates.XYZ.XYZReader(
+    #
+    ## Remove the segment IDs (aka `SYSTEM`) for prettier AtomGroup printing
+    for atom in system.atoms:
+        atom.segment.segid = ''
+    #
+    ## Set to final XYZ frame
+    system.universe.trajectory[-1]
+    #
+    return system
+
 def read_adjusted_PDB(adj_qm_pdb_mda, all_QM):
     """
     Load in the PDB file with manipulated atom coordinates.
@@ -95,7 +121,7 @@ def read_adjusted_PDB(adj_qm_pdb_mda, all_QM):
     all_QM_ag_adj = adj_pdb.copy()
     return adj_pdb, all_QM_ag_adj
 
-def integrate_movements(system, all_QM_ag, all_QM_ag_adj, lichem_out_xyz):
+def integrate_movements(system, all_QM, all_QM_ag_adj, lichem_out_xyz):
     """
     Load in the PDB file with manipulated atom coordinates.
 
@@ -103,8 +129,8 @@ def integrate_movements(system, all_QM_ag, all_QM_ag_adj, lichem_out_xyz):
     ----------
     system : MDAnalysis.core.universe.Universe
         The LICHEM XYZ.
-    all_QM_ag : MDAnalysis.core.groups.AtomGroup
-        An Atom Group consisting of the QM atoms.
+    all_QM : list
+        List of all the indices for atoms in the QM region.
     all_QM_ag_adj : MDAnalysis.core.universe.Universe
         A copy of adj_pdb.
     lichem_out_xyz : str
@@ -114,11 +140,13 @@ def integrate_movements(system, all_QM_ag, all_QM_ag_adj, lichem_out_xyz):
     lichem_out_xyz : XYZ file
         An XYZ file with the updated QM coordinates.
     """
+    all_QM_ag = mda.AtomGroup(all_QM, system)
     all_QM_ag.atoms.positions = all_QM_ag_adj.atoms.positions
-    system.atoms.write(lichem_out_xyz)
+    system.atoms.write(lichem_out_xyz, remark='')
 
 ## Run the script!
 
 all_QM = readreg(regions_file)
+system = load_XYZ(lichem_in_xyz)
 adj_pdb, all_QM_ag_adj = read_adjusted_PDB(adj_qm_pdb_mda, all_QM)
-integrate_movements(system, all_QM_ag, all_QM_ag_adj, lichem_out_xyz)
+integrate_movements(system, all_QM, all_QM_ag_adj, lichem_out_xyz)
