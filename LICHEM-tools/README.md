@@ -17,6 +17,13 @@ the changes you want to incorporate (i.e., generating a product QM/MM structure
 from an optimized reactant), this script will replace the positions of the QM
 atoms in the original XYZ with the modified QM atom positions.
 
+<div class="alert alert-danger">
+  <strong>Warning!</strong> MDAnalysis will include frame number by default in
+  the XYZ molecule_name line. LICHEM cannot handle any information in this line.
+  (There is currently a pull request which will fix this on the MDAnalysis end,
+  using remarks, and this script will work properly once it is incorporated.)
+</div>
+
 ## `vmd-qm-part1.py`
 An alternative to running `mda-qm-part1.py`, this creates a VMD command file
 to save the QM PDB, as well as view the QM region of the output XYZ.
