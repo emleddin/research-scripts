@@ -1,0 +1,31 @@
+## Beginning frame (Use PDB to enable RES info)
+parm WT_protein_system_wat.pdb [x]
+
+## Use the crystal PDB
+reference WT_protein_system_wat.pdb parm [x]
+
+## Read in the trajectory
+trajin WT_protein_system_wat_imaged_1-20.nc parm [x]
+
+## Because of PDB, use RES numbers, not atoms
+rms reference out test_rms.dat :1-300 byres
+
+hbond out WT_protein_system_wat_hbond.dat dist 3.0 avgout WT_protein_system_wat_hbond_avg.dat
+
+hbond donormask @SG out WT_protein_system_wat_s_hbond.dat dist 3.4 \
+ avgout WT_protein_system_wat_s_hbond_avg.dat
+
+rms reference out WT_protein_system_wat_total_bb_rms.dat \
+  :1-300@CA,P,O3',O5',C3',C4',C5'
+rmsd :1-300 reference perres perresavg range 1-300 \
+  perresout WT_protein_system_wat_rmsd_byres.dat
+atomicfluct :1-300 out WT_protein_system_wat_rmsf_byres.dat byres
+distance :122@FE :170@NE2 out dist_FE_NE2_WT_protein_system_wat.dat
+
+## Get for correlation matrix
+matrix out WT_protein_system_wat_corr_mat.dat name corr_mat byres :1-300 correl
+
+## Get for normal modes (evecs = eigenvectors)
+matrix out WT_protein_system_wat_covar_mat.dat name norm_mode :1-300@CA,P,C4',C2 covar
+diagmatrix norm_mode out WT_protein_system_wat_evecs.out vecs 100 reduce \
+ nmwiz nmwizvecs 100 nmwizfile WT_protein_system_wat_100.nmd nmwizmask :1-300@CA,P,C4',C2

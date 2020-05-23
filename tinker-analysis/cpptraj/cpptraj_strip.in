@@ -1,0 +1,32 @@
+## Use a PDB of the same size as the parameter topology file
+## You can use TINKER's xyzpdb or my xyzpdb-for-amber script
+parm WT_protein_system_wat.pdb [x]
+
+## Load in each ARC / TINKER XYZ file with the reference PDB as parmtop
+trajin WT-protein-system_wat_1.arc parm [x]
+trajin WT-protein-system_wat_2.arc parm [x]
+trajin WT-protein-system_wat_3.arc parm [x]
+trajin WT-protein-system_wat_4.arc parm [x]
+trajin WT-protein-system_wat_5.arc parm [x]
+trajin WT-protein-system_wat_6.arc parm [x]
+trajin WT-protein-system_wat_7.arc parm [x]
+trajin WT-protein-system_wat_8.arc parm [x]
+trajin WT-protein-system_wat_9.arc parm [x]
+trajin WT-protein-system_wat_10.arc parm [x]
+trajin WT-protein-system_wat_11.arc parm [x]
+trajin WT-protein-system_wat_12.arc parm [x]
+trajin WT-protein-system_wat_13.arc parm [x]
+trajin WT-protein-system_wat_14.arc parm [x]
+trajin WT-protein-system_wat_15.arc parm [x]
+trajin WT-protein-system_wat_16.arc parm [x]
+trajin WT-protein-system_wat_17.arc parm [x]
+trajin WT-protein-system_wat_18.arc parm [x]
+trajin WT-protein-system_wat_19.arc parm [x]
+trajin WT-protein-system_wat_20.arc parm [x]
+
+autoimage
+
+trajout WT_protein_system_wat_imaged_1-20.nc cdf
+
+## Note: if you choose to strip the trajectory, you'll likely need to write
+## out a stripped PDB as well. I haven't tested this...
