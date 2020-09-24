@@ -1,6 +1,8 @@
 # Energy Decomposition Analysis (EDA)
 These are a number of scripts for performing an energy decomposition analysis
 for AMBER MD trajectories. They use the `Residue_E_Decomp_07_15.f90` program.
+An OpenMP version of this program can be found on the
+[CisnerosRes GitHub](https://github.com/CisnerosResearch/AMBER-EDA).
 
 ## Running the FORTRAN Program
 The program will have 3 output files: `fort.803`, `fort.804`, and `fort.806`.
@@ -47,7 +49,7 @@ The `ROI` (residue of interest) selects every other residue with that residue.
 If a SNP is being investigated, the `ROI` should likely be the SNP position.
 Because of the inability to truly separated bonded and non-bonded interactions,
 the two residues directly next to the `ROI` are set to zero.
-This script is for a single run (so only 1 set of fort.803 and fort.806 files, 
+This script is for a single run (so only 1 set of fort.803 and fort.806 files,
 NOT for replicates that need to be averaged).
 
 ### `chimeraprint.sh`

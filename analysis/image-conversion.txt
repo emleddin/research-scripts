@@ -1,3 +1,8 @@
+## EPS to PDF
 for file in *.eps; do convert $file ${file%.*}-eps-converted-to.pdf; done
 
+## EPS to PNG
 for file in *.eps; do convert $file -rotate 90 ${file%.*}.png; done
+
+## Example alias
+alias eps2png='for file in *.eps; do convert $file -rotate 90 ${file%.*}.png; done'
