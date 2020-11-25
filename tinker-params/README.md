@@ -1,4 +1,6 @@
 # TINKER Params
+This directory contains information on building a `tinker.key` file from an
+AMBER prmtop file.
 
 ## param_files
 This directory contains combined leaprc files and their dependencies.

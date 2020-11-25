@@ -1,6 +1,7 @@
 # LICHEM Tools
 
-A number of scripts for working with [LICHEM](https://github.com/CisnerosResearch/LICHEM).
+This directory contains a number of scripts for working with
+[LICHEM](https://github.com/CisnerosResearch/LICHEM).
 
 ## `create-reg.py`
 VMD and LICHEM use one numbering system, whereas TINKER uses another.

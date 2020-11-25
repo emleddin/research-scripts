@@ -1,9 +1,6 @@
-# analysis
-
-## `image-conversion.txt`
-
-This file contains example `bash` commands for converting all the `.eps` files
-in a directory to `.pdf` or `.png`.
+# AMBER analysis
+This directory contains different scripts relevant to analyzing AMBER MD
+simulations.
 
 ## `residuenumbers.sh`
 

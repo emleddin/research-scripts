@@ -1,8 +1,9 @@
-# Molecular Dynamics (MD) Set-Up
-This is a collection of scripts for preparing systems for MD.
-They are primarily for use with AMBER.
+# AMBER Set-Up
+This directory contains a collection of scripts for preparing systems and
+running simulations with AMBER MD.
 
 ## Berendsen
+This directory contains scripts that use the Berendsen thermostat.
 
 `mineq.sh` is a script for looping through minimization to equilibration using
 CPUs. It calls `mdin.1` through `mdin.10`.
@@ -12,6 +13,7 @@ You can read more about what's happening in `mdin.1` to `mdin.11` at:
 [https://emleddin.github.io/comp-chem-website/AMBERguide-example-files.html#NVT](https://emleddin.github.io/comp-chem-website/AMBERguide-example-files.html#NVT)
 
 ## Langevin
+This directory contains scripts that use the Langevin thermostat.
 
 ### hedi-NPT-NVT
 `mineq.sh` is a script for looping through minimization to equilibration using

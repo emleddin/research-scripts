@@ -1,4 +1,6 @@
 # TINKER Analysis
+This directory contains different scripts relevant to analyzing TINKER MD
+simulations.
 
 ## cpptraj
 Contains information on using the `cpptraj` analysis package for analyzing
