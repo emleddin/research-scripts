@@ -1,12 +1,13 @@
 # RMS
 
-## `avg-rmsd-etc.gnu`
+These scripts pertain to root mean square analyses (such as deviation and
+fluctuation) of protein complexes.
 
+## `avg-rmsd-etc.gnu`
 A `gnuplot` script for graphing the RMSD, RMSF, and average hydrogen bond data
 and standard deviations generated using `rmagic-rmsd-rmsf-hbond-5.r`.
 
 ## `byres-processing.R`
-
 Using `cpptraj` for by-residue data results in a column for each residue with
 all the frames as rows.
 This script will process that data file (regardless of the number of columns)

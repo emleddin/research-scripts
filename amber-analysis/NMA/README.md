@@ -1,4 +1,7 @@
 # Normal Mode Analysis (NMA)
+These scripts pertain to normal mode analysis (related to principle component
+analysis) of protein complexes.
+
 
 ## `normalmodeplot.gnu`
 A gnuplot script used to generate graphs of the first three normal modes for a

@@ -1,4 +1,6 @@
 # Matrix Correlation
+These scripts pertain to matrix correlation analysis (instances of correlation,
+anti-correlation, and no correlation between residues).
 
 ## `matrcorr_graph.py`
 This script generates a residue-by-residue heat map of correlation and
