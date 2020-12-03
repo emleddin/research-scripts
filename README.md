@@ -8,6 +8,13 @@ See [comp-chem-website](https://github.com/emleddin/comp-chem-website) for expla
 The majority of these scripts pertain to molecular dynamics (MD), though
 there are some for quantum mechanics/molecular mechanics (QM/MM).
 
+## LICHEM-tools
+This directory contains a number of scripts for working with
+[LICHEM](https://github.com/CisnerosResearch/LICHEM).
+
+## QOL-Improvements
+This directory contains a number of random scripts that help make life easier.
+
 ## amber-analysis
 This directory contains different scripts relevant to analyzing AMBER MD
 simulations.
@@ -20,12 +27,10 @@ running simulations with AMBER MD.
 This directory contains scripts to help prepare and run GROMACS simulations
 using AMBER force fields.
 
-## LICHEM-tools
-This directory contains a number of scripts for working with
-[LICHEM](https://github.com/CisnerosResearch/LICHEM).
-
-## QOL-Improvements
-This directory contains a number of random scripts that help make life easier.
+## other-programs
+This directory contains different scripts and configuration files relevant to
+programs outside of those used for MD or QM/MM.
+Currently, it contains information for CAVER, gnuplot, and VMD.
 
 ## tinker-analysis
 This directory contains different scripts relevant to analyzing TINKER MD

@@ -1,0 +1,8 @@
+#color black,la
+#label
+set projection ortho
+light contrast 0.3
+light reflectivity 0.5
+
+## Remove nucleotide objects
+nuc side atoms

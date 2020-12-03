@@ -1,0 +1,12 @@
+display projection orthographic
+menu main on
+display nearclip set 0
+axes location off
+color Display Background white
+display depthcue off
+atomselect macro noh {not (mass 1.008 and charge < 0.25)}
+set env(VMDFILECHOOSER) FLTK
+color Labels Atoms black
+color Labels Bonds black
+color Labels Angles gray
+label textthickness 2.0
