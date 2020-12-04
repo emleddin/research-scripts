@@ -75,3 +75,7 @@ multiple times [i.e., (1) WT-MutA, (2) WT-MutB, (3) WT-MutC, (4) WT-MutD, and
 (5) WT-MutD].
 The resulting plot has one x-axis for residues and individual y-axes for
 each dataset.
+
+### `EDA-single-diff.py`
+This script will create a barplot of 1 set of EDA difference data.
+The difference data file can be made by running `rmagic-EDA-avg-diffs.r`.
