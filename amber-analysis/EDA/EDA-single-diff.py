@@ -1,6 +1,11 @@
 #! /usr/bin/python3
 ## This script works with data generated from `rmagic-EDA-avg-diffs.r`
 
+## Needed on MacOS for centering error bars correctly
+## See https://github.com/matplotlib/matplotlib/issues/3400
+#import matplotlib as mpl
+#mpl.use( "cairo" )
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -11,7 +16,7 @@ save_name = 'WT-MUTA_EDA_diff.png'
 ## Label on plot
 sys_lab = "WT - MUTA"
 
-## Threshold val
+## Threshold value -- places a horizontal line on the plot at +/- thresh
 thresh=10
 
 ## Residue of interest to highlight with gray bar
@@ -19,6 +24,12 @@ ROI=150
 
 ## Total Residues (set x-axis from 0 to tot_res)
 tot_res=450
+
+## Plot with error bars? True = yes
+error_bars=False
+
+## Color for the barplot -- use Matplotlib color names or a hex code
+bar_color='g'
 
 ## Read in data
 ## header = 0 reads header in first row because Python starts at 0
@@ -51,7 +62,20 @@ ax = plt.subplot(111)
 ## Span goes from residue before ROI to residue after ROI
 ## g is green to matplotlib
 ax.axvspan(ROI-1, ROI+1, alpha=0.2, color='gray')
-sys = ax.bar(d1['Residue'], d1['DiffE'], color = 'g', label=sys_lab)
+
+## No error bars
+if error_bars == False:
+    sys = ax.bar(d1['Residue'], d1['DiffE'], color = bar_color, label=sys_lab)
+## Yes error bars
+else:
+    e_bar = {'ecolor': 'black',
+             'capsize': 2,
+             'capthick': 0.5,
+             'elinewidth': 0.5,
+             'label': 'Avg. St. Dev.'}
+
+    sys = ax.bar(d1['Residue'], d1['DiffE'], yerr=d1['AvgSTDEV'], \
+     color = bar_color, label=sys_lab, error_kw=e_bar)
 
 ##
 ax.axhline(y=thresh, color='gray', linestyle='--', dashes=(5, 5))
@@ -70,7 +94,15 @@ ax.tick_params(axis='both', which='major', pad=10, length=10)
 
 plt.ylabel('Energy (kcal/mol)')
 plt.xlabel('Residue Number')
-plt.legend(handles=[sys])
+
+if error_bars == False:
+    plt.legend(handles=[sys])
+else:
+    ## Have plot label above error bars in legend
+    handles,labels = ax.get_legend_handles_labels()
+    handles = [handles[1], handles[0]]
+    labels = [labels[1], labels[0]]
+    plt.legend(handles, labels)
 
 #plt.savefig(save_name, dpi=300, bbox_inches = 'tight', pad_inches = 0)
 plt.savefig(save_name, dpi=300)
