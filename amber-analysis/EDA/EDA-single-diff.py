@@ -10,14 +10,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-## Figure name
+## Figure file name
 save_name = 'WT-MUTA_EDA_diff.png'
 
 ## Label on plot
 sys_lab = "WT - MUTA"
 
 ## Threshold value -- places a horizontal line on the plot at +/- thresh
-thresh=10
+thresh=1
 
 ## Residue of interest to highlight with gray bar
 ROI=150
