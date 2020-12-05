@@ -17,3 +17,12 @@ d1['AvgSTDEV'] = np.random.uniform(low=0., high=0.1, size=450)
 ```
 
 The file names match the script that generated them with the prefix `test-`.
+
+## Result of `EDA-bar-comp.py`
+<img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/EDA/rendered-examples/test-EDA-bar-comp.png?raw=true" alt="A bar plot comparing two systems with average standard deviation" width="500"/>
+
+## Result of `EDA-diffs.py`
+<img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/EDA/rendered-examples/test-EDA-diffs.png?raw=true" alt="A figure with 5 subplots of energy and average standard deviation" width="500"/>
+
+## Result of `EDA-single-diff.py`
+<img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/EDA/rendered-examples/test-EDA-single-diff.png?raw=true" alt="A bar plot with average standard deviation" width="500"/>
