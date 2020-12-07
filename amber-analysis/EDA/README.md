@@ -80,9 +80,21 @@ each dataset.
 This script will create a barplot of 1 set of EDA difference data.
 The difference data file can be made by running `rmagic-EDA-avg-diffs.r`.
 
+### `EDA-candlestick.gnu`
+This script will create a box and whisker plot of 1 set of EDA difference data
+using gnuplot.
+The difference data file can be made by running `rmagic-EDA-avg-diffs.r`.
+For the best auto-arrangement, first save the image as an EPS file and then
+convert it to PNG.
+Conversion can be done with ImageMagick (`-flatten` gives it a white background
+instead of transparent).
+```
+convert -flatten image.eps -rotate 90 image.png
+```
+
 ### Rendered Examples
-This directory has examples of the Python plots made from the above scripts.
-Toy data were created through commands like:
+This directory has examples of the Python and Gnuplot plots made from the above
+scripts. Toy data were created through commands like:
 ```python
 import pandas as pd
 import numpy as np
@@ -95,4 +107,9 @@ d1.columns = ['Residues']
 d1['DiffE'] = np.random.normal(loc=0,scale=0.5,size=450)
 ## Create a uniform dataset for StDev from 0 to 0.1
 d1['AvgSTDEV'] = np.random.uniform(low=0., high=0.1, size=450)
+
+## Save a file for Gnuplot examples
+with open("toy_data.dat", 'w+') as f:
+    f.write("  Residue   TotIntE    AvgStDev\n")
+    np.savetxt(f, d1.values, fmt='%10.5f')
 ```

@@ -14,6 +14,11 @@ d1.columns = ['Residues']
 d1['DiffE'] = np.random.normal(loc=0,scale=0.5,size=450)
 ## Create a uniform dataset for StDev from 0 to 0.1
 d1['AvgSTDEV'] = np.random.uniform(low=0., high=0.1, size=450)
+
+## Save a file for Gnuplot examples
+with open("toy_data.dat", 'w+') as f:
+    f.write("  Residue   TotIntE    AvgStDev\n")
+    np.savetxt(f, d1.values, fmt='%10.5f')
 ```
 
 The file names match the script that generated them with the prefix `test-`.
@@ -26,3 +31,6 @@ The file names match the script that generated them with the prefix `test-`.
 
 ## Result of `EDA-single-diff.py`
 <img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/EDA/rendered-examples/test-EDA-single-diff.png?raw=true" alt="A bar plot with average standard deviation" width="500"/>
+
+## Result of `EDA-candlestick.gnu`
+<img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/EDA/rendered-examples/test-EDA-candlestick.png?raw=true" alt="A bar and whisker plot with average standard deviation" width="500"/>
