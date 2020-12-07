@@ -8,7 +8,7 @@ set ylabel "Total Interaction Energy (kcal/mol)"
 set xrange [0:450]
 set key top left Left reverse width 2 height 1
 
-set xtics ("100" 0, "150" 50, "200" 100, "250" 150, "300" 200, "350" 250, "450" 300, \
+set xtics ("100" 0, "150" 50, "200" 100, "250" 150, "300" 200, "350" 250, "400" 300, \
      "" 325, "" 335, "1000" 350, "1050" 400) border nomirror out;
 set x2tics border offset 0,-0.25 nomirror out norotate left ("BR" 325, "" 335)
 

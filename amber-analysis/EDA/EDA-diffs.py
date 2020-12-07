@@ -59,7 +59,7 @@ thresh=1
 error_bars=True
 
 ## X-axis labels (because you need to match the biologists)
-labelsx2 = [100, 150, 200, 250, 300, 350, 450, '     BR', '', 1000, 1050]
+labelsx2 = [100, 150, 200, 250, 300, 350, 400, '     BR', '', 1000, 1050]
 ## X-axis locations
 placesx2 = [0, 50, 100, 150, 200, 250, 300, 325, 335, 350, 400]
 
