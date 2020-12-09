@@ -78,5 +78,6 @@ command line commands for selecting residues across each WT/MUT pair that are
 - (c) multiple bonds present, some for longer in WT, others longer in MUT, and
 - (d) the MUT position itself.
 
-This will miss bonds that were marked as "No Match", but there's typically
-only 2-3 per system, so it's not as much of a hassle to add them by hand.
+### `single-r-to-chimera.py`
+This script uses 2 files, each generated from `rmagic-hbond-avg.r` to print
+a file of Chimera commands (like the one described in `df-to-chimera.py`).

@@ -20,6 +20,7 @@ systems = ['SysA','SysB','SysC','SysD','SysE']
 
 ## Define some functions
 
+## https://stackoverflow.com/questions/16490261/python-pandas-write-dataframe-to-fixed-width-file-to-fwf
 def write_fwf(df):
     content = tabulate(df.values.tolist(), list(df.columns), tablefmt="plain")
     return content
