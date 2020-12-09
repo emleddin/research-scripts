@@ -66,3 +66,17 @@ While it is based off total time, that time will be system dependent.
 So, if you're comparing A-system that ran for 20 ns and B-system that ran for
 200 ns, a 4 ns presence in A-system would be equivalent to a 40 ns presence in
 B-system.
+
+### `df-to-chimera.py`
+This script uses the file generated from `system-hbond-table.r` to print
+filtered tables that show an Acceptor/Donor pair as important in 3, 4, or 5
+systems.
+Independent of these filtered groups, it will also print a file of Chimera
+command line commands for selecting residues across each WT/MUT pair that are
+- (a) present longer in the WT
+- (b) present for longer in the MUT system
+- (c) multiple bonds present, some for longer in WT, others longer in MUT, and
+- (d) the MUT position itself.
+
+This will miss bonds that were marked as "No Match", but there's typically
+only 2-3 per system, so it's not as much of a hassle to add them by hand.

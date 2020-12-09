@@ -39,7 +39,7 @@ set pm3d map corners2color c1
 set xtics nomirror out
 #set ytics nomirror
 set ytics (\"100\" 0, \"150\" 50, \"200\" 100, \"250\" 150, \"300\" 200, \\\\
-\"350\" 250, \"450\" 300, \"BR\" 325, \"\" 335, \"1000\" 350, \"1050\" 400) \\\\
+\"350\" 250, \"400\" 300, \"BR\" 325, \"\" 335, \"1000\" 350, \"1050\" 400) \\\\
 border nomirror out
 set cbrange [  -0.500:   7.500]
 set cbtics    0.000,7.000,1.0
