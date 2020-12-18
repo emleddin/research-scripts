@@ -80,6 +80,14 @@ each dataset.
 This script will create a barplot of 1 set of EDA difference data.
 The difference data file can be made by running `rmagic-EDA-avg-diffs.r`.
 
+### `EDA-scatter-broken-y.py`
+This script will plot a scatterplot with error bars for 5 sets of EDA
+difference data.
+The difference data files can be made by running `rmagic-EDA-avg-diffs.r`
+multiple times [i.e., (1) WT-MutA, (2) WT-MutB, (3) WT-MutC, (4) WT-MutD, and
+(5) WT-MutD].
+The resulting plot has one x-axis for residues and a broken y-axis.
+
 ### `EDA-candlestick.gnu`
 This script will create a box and whisker plot of 1 set of EDA difference data
 using gnuplot.
