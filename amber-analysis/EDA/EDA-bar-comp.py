@@ -15,16 +15,16 @@ import pandas as pd
 save_name = 'sysA_sysB_total_barchart.png'
 
 ## Labels on plot
-sys_a_tag = 'Sys A'
-sys_b_tag = 'Sys B'
+sys1_lab = 'Sys A'
+sys2_lab = 'Sys B'
 
 ## Plot with error bars? True = yes
 error_bars=True
 
 ## Color for the barplots -- use Matplotlib color names or a hex code
 ## #0000FA is blue, #FA7D00 is orange
-color_a = '#0000FA'
-color_b = '#FA7D00'
+color_1 = '#0000FA'
+color_2 = '#FA7D00'
 
 ## Threshold value -- places a horizontal line on the plot at +/- thresh
 thresh=1
@@ -75,10 +75,10 @@ ax.tick_params(axis='both', which='major', pad=10, length=10)
 
 ## No error bars
 if error_bars == False:
-    sys_a = ax.bar(index, d1['AvgIntTot'], bar_width, color='#0000FA', \
-     align='center', label=sys_a_tag)
-    sys_b = ax.bar(index + bar_width, d2['AvgIntTot'], bar_width, color='#FA7D00', \
-     align='center',label=sys_b_tag)
+    sys_a = ax.bar(index, d1['AvgIntTot'], bar_width, color=color_1, \
+     align='center', label=sys1_lab)
+    sys_b = ax.bar(index + bar_width, d2['AvgIntTot'], bar_width, color=color_2, \
+     align='center',label=sys2_lab)
 else:
     e_bar = {'ecolor': 'black',
              'capsize': 2,
@@ -86,9 +86,9 @@ else:
              'elinewidth': 0.5,
              'label': 'Avg. St. Dev.'}
     sys_a = ax.bar(index, d1['AvgIntTot'], bar_width, yerr=d1['AvgStdDev'], \
-     color='#0000FA', align='center', label=sys_a_tag, error_kw=e_bar)
+     color=color_1, align='center', label=sys1_lab, error_kw=e_bar)
     sys_b = ax.bar(index + bar_width, d2['AvgIntTot'], bar_width, \
-     yerr=d1['AvgStdDev'], color='#FA7D00', align='center',label=sys_b_tag, \
+     yerr=d2['AvgStdDev'], color=color_2, align='center',label=sys2_lab, \
      error_kw=e_bar)
 
 ## Add threshold lines
@@ -99,7 +99,7 @@ plt.ylabel('Energy (kcal/mol)')
 plt.xlabel('Residue Number')
 
 if error_bars == False:
-    plt.legend(handles=[sys_a,sys_b])
+    plt.legend(handles=[sys1_lab,sys2_lab])
 else:
     ## Have plot label above error bars in legend
     handles,labels = ax.get_legend_handles_labels()

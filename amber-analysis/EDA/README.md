@@ -113,3 +113,43 @@ with open("toy_data.dat", 'w+') as f:
     f.write("  Residue   TotIntE    AvgStDev\n")
     np.savetxt(f, d1.values, fmt='%10.5f')
 ```
+
+A secondary way to create toy data, particularly with large outliers, is
+based off a
+[StackExchange answer](https://stackoverflow.com/questions/55351782/how-should-i-generate-outliers-randomly).
+```python
+import pandas as pd
+import numpy as np
+
+def generate(median=0, std_dev=0.5, max_err=38, size=420, outlier_size=15):
+    errs = np.random.normal(loc=median, scale=std_dev, size=size)
+    data = median + errs
+    #
+    #
+    lower_errs = np.random.randint(1, max_err + 1) * \
+     np.random.rand(outlier_size)
+    lower_outliers = median - lower_errs
+    #
+    for i in range(len(lower_outliers)):
+        if lower_outliers[i] < -19. and lower_outliers[i] > -40.:
+            lower_outliers[i] += -20.
+    #
+    upper_errs = np.random.randint(1, max_err + 1) * \
+     np.random.rand(outlier_size)
+    upper_outliers = median + upper_errs
+    #
+    data = np.concatenate((data, lower_outliers, upper_outliers))
+    np.random.shuffle(data)
+    #
+    return data
+
+data = generate()
+
+d1 = pd.DataFrame(np.arange(1,451))
+## Name that column "Residues"
+d1.columns = ['Residues']
+## Add generated data with outliers
+d1['DiffE'] = generate()
+## Create a uniform dataset for StDev from 0 to 1
+d1['AvgSTDEV'] = np.random.uniform(low=0., high=1, size=450)
+```
