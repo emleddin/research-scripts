@@ -69,8 +69,8 @@ The file names match the script that generated them with the prefix `test-`.
 ## Result of `EDA-single-diff.py`
 <img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/EDA/rendered-examples/test-EDA-single-diff.png?raw=true" alt="A bar plot with average standard deviation" width="500"/>
 
+## Result of `EDA-scatter-broken-y.py`
+<img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/EDA/rendered-examples/test-EDA-scatter-broken-y.png?raw=true" alt="A scatter plot with a broken y-axis and average standard deviation" width="500"/>
+
 ## Result of `EDA-candlestick.gnu`
 <img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/EDA/rendered-examples/test-EDA-candlestick.png?raw=true" alt="A bar and whisker plot with average standard deviation" width="500"/>
-
-## Result of `EDA-scatter-broken-y.gnu`
-<img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/EDA/rendered-examples/test-EDA-scatter-broken-y.png?raw=true" alt="A scatter plot with a broken y-axis and average standard deviation" width="500"/>
