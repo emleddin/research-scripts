@@ -25,3 +25,12 @@ It likely will not be `500`, depending on what you used for you mdin files.
 This script will average RMSDs, RMSFs, and average hydrogen bonds for
 replicate trajectories over the same timescale and give standard deviations.
 The output files can be plotted using `avg-rmsd-etc.gnu`.
+
+## `moving-averages.py`
+A `python3` script for plotting RMSD, RMSF, and average hydrogen bonds present
+on separate graphs.
+RMSD and average hydrogen bonds present are plotted as moving averages based
+on the previous 1 ns; RMSD is plotted as given.
+The `frame2ns` variable converts Frame number column to time in nanoseconds
+using a multiplier (in this case, 1/500).
+It likely will not be `500`, depending on what you used for you mdin files.
