@@ -2,6 +2,7 @@
 
 These scripts pertain to root mean square analyses (such as deviation and
 fluctuation) of protein complexes.
+Total number of hydrogen bonds are also included.
 
 ## `avg-rmsd-etc.gnu`
 A `gnuplot` script for graphing the RMSD, RMSF, and average hydrogen bond data
@@ -34,3 +35,7 @@ on the previous 1 ns; RMSD is plotted as given.
 The `frame2ns` variable converts Frame number column to time in nanoseconds
 using a multiplier (in this case, 1/500).
 It likely will not be `500`, depending on what you used for you mdin files.
+
+## Rendered Examples
+This directory has examples of the Python and Gnuplot figures made from the
+above plotting scripts.
