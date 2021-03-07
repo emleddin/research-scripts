@@ -8,21 +8,26 @@
 #SBATCH --gres=gpu:2            # 2 GPUs
 #SBATCH -t 12:00:00             # Wallclock time
 
+## Set up a variable for file naming
+sys=WT_protein_system_wat
+
 ### Loading modules
 module load amber/16-cuda-mpi
 
 e=0
 f=1
 
-while [ $f -lt 101 ]; do
+## Loop for 15 files (change to files+1)
+while [ $f -lt 16 ]; do
 
-$AMBERHOME/bin/pmemd.cuda -O -i mdin.4 \
--o WT_protein_system_wat_md$f.out \
--p WT_protein_system_wat.prmtop \
--c WT_protein_system_wat_md$e.rst \
--r WT_protein_system_wat_md$f.rst \
--x WT_protein_system_wat_md$f.mdcrd \
--ref WT_protein_system_wat_md$e.rst
+## Loop for 500 files (change to files+1)
+$AMBERHOME/bin/pmemd.cuda -O -i md.mdin \
+-o ${sys}_md$f.out \
+-p ${sys}.prmtop \
+-c ${sys}_md$e.rst \
+-r ${sys}_md$f.rst \
+-x ${sys}_md$f.nc \
+-ref ${sys}_md$e.rst
 
 e=$[$e+1]
 f=$[$f+1]
