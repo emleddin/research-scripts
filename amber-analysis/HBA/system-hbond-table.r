@@ -7,7 +7,7 @@
 
 ## This script has been pre-built for a comparing 3 separate systems
 ## More or less than 3 reps (up to 5) can be achieved through
-## Commenting or uncommenting
+## Changing the `sets` number below.
 ## 1a with 1b | 2a with 2b | 3a with 3b | 4a with 4b | 5a with 5b
 
 ## Paths to the Hbond-avg files
@@ -105,140 +105,395 @@ options(scipen = 999)
 #--Read in Hbond Scripts--#
 #-------------------------#
 
-## Reading each file as a data.table.
-## Bonus - fread is much faster than read.csv
-read1a <- fread(infile1a, header=TRUE)
-read1b <- fread(infile1b, header=TRUE)
-read2a <- fread(infile2a, header=TRUE)
-read2b <- fread(infile2b, header=TRUE)
-read3a <- fread(infile3a, header=TRUE)
-read3b <- fread(infile3b, header=TRUE)
-#read4a <- fread(infile4a, header=TRUE)
-#read4b <- fread(infile4b, header=TRUE)
-#read5a <- fread(infile5a, header=TRUE)
-#read5b <- fread(infile5b, header=TRUE)
+## Deal with sets if X present
+if (sets < 1) { # Case of neg values???
+    stop(sprintf("You gave me %s set(s), which is less than 1 input set.
+         Stopping now...", sets))
+} else if (sets == 1) { # Case of 1 file
+    ## Reading each file as a data.table.
+    ## Bonus - fread is much faster than read.csv
+    read1a <- fread(infile1a, header=TRUE)
+    read1b <- fread(infile1b, header=TRUE)
+    ## Force name the columns for ease of access
+    colnames(read1a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read1b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    ## Drop the Index column
+    read1a <- within(read1a, rm(Index))
+    read1b <- within(read1b, rm(Index))
+    ## Rename the Average Frac Columns
+    read1a <- plyr:::rename(read1a, c("AvgFrac"=tag1a))
+    read1b <- plyr:::rename(read1b, c("AvgFrac"=tag1b))
+    ## Merge the tables together
+    tab1ab <- merge(read1a, read1b, by=c("Acceptor","Donor"))
+    ## Treat the AvgFrac columns numerically
+    tab1ab[[tag1a]] <- as.numeric(as.character(tab1ab[[tag1a]]))
+    tab1ab[[tag1b]] <- as.numeric(as.character(tab1ab[[tag1b]]))
+    ## Explicitly set all NA values as "0"
+    tab1ab[is.na(tab1ab)] <- 0
+    ## Get the absolute difference between columns
+    tab1ab[[tag1c]] <- abs(tab1ab[[tag1a]] - tab1ab[[tag1b]])
+    ## Change to percentages
+    tab1ab[[tag1a]] <- tab1ab[[tag1a]]*100
+    tab1ab[[tag1b]] <- tab1ab[[tag1b]]*100
+    tab1ab[[tag1c]] <- tab1ab[[tag1c]]*100
+    ## Get values > cutoff
+    ## UQ removes the string quotes
+    tab1ab_cut <- filter(tab1ab, UQ(as.name(tag1c)) > cutoff)
+    ## Limit to 4 sig figs after decimal
+    tab1ab_cleancut <- format(tab1ab_cut, digits=4)
+} else if (sets == 2) { # Case of 2 files
+    ## Reading each file as a data.table.
+    ## Bonus - fread is much faster than read.csv
+    read1a <- fread(infile1a, header=TRUE)
+    read1b <- fread(infile1b, header=TRUE)
+    read2a <- fread(infile2a, header=TRUE)
+    read2b <- fread(infile2b, header=TRUE)
+    ## Force name the columns for ease of access
+    colnames(read1a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read1b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read2a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read2b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    ## Drop the Index column
+    read1a <- within(read1a, rm(Index))
+    read1b <- within(read1b, rm(Index))
 
-colnames(read1a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
-colnames(read1b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
-colnames(read2a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
-colnames(read2b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
-colnames(read3a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
-colnames(read3b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
-#colnames(read4a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
-#colnames(read4b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
-#colnames(read5a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
-#colnames(read5b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    read2a <- within(read2a, rm(Index))
+    read2b <- within(read2b, rm(Index))
+    ## Rename the Average Frac Columns
+    read1a <- plyr:::rename(read1a, c("AvgFrac"=tag1a))
+    read1b <- plyr:::rename(read1b, c("AvgFrac"=tag1b))
 
-## Drop the Index column
-read1a <- within(read1a, rm(Index))
-read1b <- within(read1b, rm(Index))
+    read2a <- plyr:::rename(read2a, c("AvgFrac"=tag2a))
+    read2b <- plyr:::rename(read2b, c("AvgFrac"=tag2b))
+    ## Merge the tables together
+    tab1ab <- merge(read1a, read1b, by=c("Acceptor","Donor"))
+    tab2ab <- merge(read2a, read2b, by=c("Acceptor","Donor"))
+    ## Treat the AvgFrac columns numerically
+    tab1ab[[tag1a]] <- as.numeric(as.character(tab1ab[[tag1a]]))
+    tab1ab[[tag1b]] <- as.numeric(as.character(tab1ab[[tag1b]]))
 
-read2a <- within(read2a, rm(Index))
-read2b <- within(read2b, rm(Index))
+    tab2ab[[tag2a]] <- as.numeric(as.character(tab2ab[[tag2a]]))
+    tab2ab[[tag2b]] <- as.numeric(as.character(tab2ab[[tag2b]]))
+    ## Explicitly set all NA values as "0"
+    tab1ab[is.na(tab1ab)] <- 0
+    tab2ab[is.na(tab2ab)] <- 0
+    ## Get the absolute difference between columns
+    tab1ab[[tag1c]] <- abs(tab1ab[[tag1a]] - tab1ab[[tag1b]])
+    tab2ab[[tag2c]] <- abs(tab2ab[[tag2a]] - tab2ab[[tag2b]])
+    ## Change to percentages
+    tab1ab[[tag1a]] <- tab1ab[[tag1a]]*100
+    tab1ab[[tag1b]] <- tab1ab[[tag1b]]*100
+    tab1ab[[tag1c]] <- tab1ab[[tag1c]]*100
 
-read3a <- within(read3a, rm(Index))
-read3b <- within(read3b, rm(Index))
+    tab2ab[[tag2a]] <- tab2ab[[tag2a]]*100
+    tab2ab[[tag2b]] <- tab2ab[[tag2b]]*100
+    tab2ab[[tag2c]] <- tab2ab[[tag2c]]*100
+    ## Get values > cutoff
+    ## UQ removes the string quotes
+    tab1ab_cut <- filter(tab1ab, UQ(as.name(tag1c)) > cutoff)
+    tab2ab_cut <- filter(tab2ab, UQ(as.name(tag2c)) > cutoff)
+    ## Limit to 4 sig figs after decimal
+    tab1ab_cleancut <- format(tab1ab_cut, digits=4)
+    tab2ab_cleancut <- format(tab2ab_cut, digits=4)
+} else if (sets == 3) { # Case of 3 files
+    ## Reading each file as a data.table.
+    ## Bonus - fread is much faster than read.csv
+    read1a <- fread(infile1a, header=TRUE)
+    read1b <- fread(infile1b, header=TRUE)
+    read2a <- fread(infile2a, header=TRUE)
+    read2b <- fread(infile2b, header=TRUE)
+    read3a <- fread(infile3a, header=TRUE)
+    read3b <- fread(infile3b, header=TRUE)
+    ## Force name the columns for ease of access
+    colnames(read1a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read1b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read2a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read2b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read3a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read3b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    ## Drop the Index column
+    read1a <- within(read1a, rm(Index))
+    read1b <- within(read1b, rm(Index))
 
-#read4a <- within(read4a, rm(Index))
-#read4b <- within(read4b, rm(Index))
+    read2a <- within(read2a, rm(Index))
+    read2b <- within(read2b, rm(Index))
 
-#read5a <- within(read5a, rm(Index))
-#read5b <- within(read5b, rm(Index))
+    read3a <- within(read3a, rm(Index))
+    read3b <- within(read3b, rm(Index))
+    ## Rename the Average Frac Columns
+    read1a <- plyr:::rename(read1a, c("AvgFrac"=tag1a))
+    read1b <- plyr:::rename(read1b, c("AvgFrac"=tag1b))
 
-## Rename the Average Frac Columns
-read1a <- plyr:::rename(read1a, c("AvgFrac"=tag1a))
-read1b <- plyr:::rename(read1b, c("AvgFrac"=tag1b))
+    read2a <- plyr:::rename(read2a, c("AvgFrac"=tag2a))
+    read2b <- plyr:::rename(read2b, c("AvgFrac"=tag2b))
 
-read2a <- plyr:::rename(read2a, c("AvgFrac"=tag2a))
-read2b <- plyr:::rename(read2b, c("AvgFrac"=tag2b))
+    read3a <- plyr:::rename(read3a, c("AvgFrac"=tag3a))
+    read3b <- plyr:::rename(read3b, c("AvgFrac"=tag3b))
+    ## Merge the tables together
+    tab1ab <- merge(read1a, read1b, by=c("Acceptor","Donor"))
+    tab2ab <- merge(read2a, read2b, by=c("Acceptor","Donor"))
+    tab3ab <- merge(read3a, read3b, by=c("Acceptor","Donor"))
+    ## Treat the AvgFrac columns numerically
+    tab1ab[[tag1a]] <- as.numeric(as.character(tab1ab[[tag1a]]))
+    tab1ab[[tag1b]] <- as.numeric(as.character(tab1ab[[tag1b]]))
 
-read3a <- plyr:::rename(read3a, c("AvgFrac"=tag3a))
-read3b <- plyr:::rename(read3b, c("AvgFrac"=tag3b))
+    tab2ab[[tag2a]] <- as.numeric(as.character(tab2ab[[tag2a]]))
+    tab2ab[[tag2b]] <- as.numeric(as.character(tab2ab[[tag2b]]))
 
-#read4a <- plyr:::rename(read4a, c("AvgFrac"=tag4a))
-#read4b <- plyr:::rename(read4b, c("AvgFrac"=tag4b))
+    tab3ab[[tag3a]] <- as.numeric(as.character(tab3ab[[tag3a]]))
+    tab3ab[[tag3b]] <- as.numeric(as.character(tab3ab[[tag3b]]))
+    ## Explicitly set all NA values as "0"
+    tab1ab[is.na(tab1ab)] <- 0
+    tab2ab[is.na(tab2ab)] <- 0
+    tab3ab[is.na(tab3ab)] <- 0
+    ## Get the absolute difference between columns
+    tab1ab[[tag1c]] <- abs(tab1ab[[tag1a]] - tab1ab[[tag1b]])
+    tab2ab[[tag2c]] <- abs(tab2ab[[tag2a]] - tab2ab[[tag2b]])
+    tab3ab[[tag3c]] <- abs(tab3ab[[tag3a]] - tab3ab[[tag3b]])
+    ## Change to percentages
+    tab1ab[[tag1a]] <- tab1ab[[tag1a]]*100
+    tab1ab[[tag1b]] <- tab1ab[[tag1b]]*100
+    tab1ab[[tag1c]] <- tab1ab[[tag1c]]*100
 
-#read5a <- plyr:::rename(read5a, c("AvgFrac"=tag5a))
-#read5b <- plyr:::rename(read5b, c("AvgFrac"=tag5b))
+    tab2ab[[tag2a]] <- tab2ab[[tag2a]]*100
+    tab2ab[[tag2b]] <- tab2ab[[tag2b]]*100
+    tab2ab[[tag2c]] <- tab2ab[[tag2c]]*100
 
-## Merge the tables together
-tab1ab <- merge(read1a, read1b, by=c("Acceptor","Donor"))
-tab2ab <- merge(read2a, read2b, by=c("Acceptor","Donor"))
-tab3ab <- merge(read3a, read3b, by=c("Acceptor","Donor"))
-#tab4ab <- merge(read4a, read4b, by=c("Acceptor","Donor"))
-#tab5ab <- merge(read5a, read4b, by=c("Acceptor","Donor"))
+    tab3ab[[tag3a]] <- tab3ab[[tag3a]]*100
+    tab3ab[[tag3b]] <- tab3ab[[tag3b]]*100
+    tab3ab[[tag3c]] <- tab3ab[[tag3c]]*100
+    ## Get values > cutoff
+    ## UQ removes the string quotes
+    tab1ab_cut <- filter(tab1ab, UQ(as.name(tag1c)) > cutoff)
+    tab2ab_cut <- filter(tab2ab, UQ(as.name(tag2c)) > cutoff)
+    tab3ab_cut <- filter(tab3ab, UQ(as.name(tag3c)) > cutoff)
+    ## Limit to 4 sig figs after decimal
+    tab1ab_cleancut <- format(tab1ab_cut, digits=4)
+    tab2ab_cleancut <- format(tab2ab_cut, digits=4)
+    tab3ab_cleancut <- format(tab3ab_cut, digits=4)
+} else if (sets == 4) { # Case of 4 files
+    ## Reading each file as a data.table.
+    ## Bonus - fread is much faster than read.csv
+    read1a <- fread(infile1a, header=TRUE)
+    read1b <- fread(infile1b, header=TRUE)
+    read2a <- fread(infile2a, header=TRUE)
+    read2b <- fread(infile2b, header=TRUE)
+    read3a <- fread(infile3a, header=TRUE)
+    read3b <- fread(infile3b, header=TRUE)
+    read4a <- fread(infile4a, header=TRUE)
+    read4b <- fread(infile4b, header=TRUE)
+    ## Force name the columns for ease of access
+    colnames(read1a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read1b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read2a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read2b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read3a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read3b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read4a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read4b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    ## Drop the Index column
+    read1a <- within(read1a, rm(Index))
+    read1b <- within(read1b, rm(Index))
 
+    read2a <- within(read2a, rm(Index))
+    read2b <- within(read2b, rm(Index))
 
-## Treat the AvgFrac columns numerically
-tab1ab[[tag1a]] <- as.numeric(as.character(tab1ab[[tag1a]]))
-tab1ab[[tag1b]] <- as.numeric(as.character(tab1ab[[tag1b]]))
+    read3a <- within(read3a, rm(Index))
+    read3b <- within(read3b, rm(Index))
 
-tab2ab[[tag2a]] <- as.numeric(as.character(tab2ab[[tag2a]]))
-tab2ab[[tag2b]] <- as.numeric(as.character(tab2ab[[tag2b]]))
+    read4a <- within(read4a, rm(Index))
+    read4b <- within(read4b, rm(Index))
+    ## Rename the Average Frac Columns
+    read1a <- plyr:::rename(read1a, c("AvgFrac"=tag1a))
+    read1b <- plyr:::rename(read1b, c("AvgFrac"=tag1b))
 
-tab3ab[[tag3a]] <- as.numeric(as.character(tab3ab[[tag3a]]))
-tab3ab[[tag3b]] <- as.numeric(as.character(tab3ab[[tag3b]]))
+    read2a <- plyr:::rename(read2a, c("AvgFrac"=tag2a))
+    read2b <- plyr:::rename(read2b, c("AvgFrac"=tag2b))
 
-#tab4ab[[tag4a]] <- as.numeric(as.character(tab4ab[[tag4a]]))
-#tab4ab[[tag4b]] <- as.numeric(as.character(tab4ab[[tag4b]]))
+    read3a <- plyr:::rename(read3a, c("AvgFrac"=tag3a))
+    read3b <- plyr:::rename(read3b, c("AvgFrac"=tag3b))
 
-#tab5ab[[tag5a]] <- as.numeric(as.character(tab5ab[[tag5a]]))
-#tab5ab[[tag5b]] <- as.numeric(as.character(tab5ab[[tag5b]]))
+    read4a <- plyr:::rename(read4a, c("AvgFrac"=tag4a))
+    read4b <- plyr:::rename(read4b, c("AvgFrac"=tag4b))
+    ## Merge the tables together
+    tab1ab <- merge(read1a, read1b, by=c("Acceptor","Donor"))
+    tab2ab <- merge(read2a, read2b, by=c("Acceptor","Donor"))
+    tab3ab <- merge(read3a, read3b, by=c("Acceptor","Donor"))
+    tab4ab <- merge(read4a, read4b, by=c("Acceptor","Donor"))
+    ## Treat the AvgFrac columns numerically
+    tab1ab[[tag1a]] <- as.numeric(as.character(tab1ab[[tag1a]]))
+    tab1ab[[tag1b]] <- as.numeric(as.character(tab1ab[[tag1b]]))
 
-## Explicitly set all NA values as "0"
-tab1ab[is.na(tab1ab)] <- 0
-tab2ab[is.na(tab2ab)] <- 0
-tab3ab[is.na(tab3ab)] <- 0
-#tab4ab[is.na(tab4ab)] <- 0
-#tab5ab[is.na(tab5ab)] <- 0
+    tab2ab[[tag2a]] <- as.numeric(as.character(tab2ab[[tag2a]]))
+    tab2ab[[tag2b]] <- as.numeric(as.character(tab2ab[[tag2b]]))
 
+    tab3ab[[tag3a]] <- as.numeric(as.character(tab3ab[[tag3a]]))
+    tab3ab[[tag3b]] <- as.numeric(as.character(tab3ab[[tag3b]]))
 
-## Get the absolute difference between columns
-tab1ab[[tag1c]] <- abs(tab1ab[[tag1a]] - tab1ab[[tag1b]])
-tab2ab[[tag2c]] <- abs(tab2ab[[tag2a]] - tab2ab[[tag2b]])
-tab3ab[[tag3c]] <- abs(tab3ab[[tag3a]] - tab3ab[[tag3b]])
-#tab4ab[[tag4c]] <- abs(tab4ab[[tag4a]] - tab4ab[[tag4b]])
-#tab5ab[[tag5c]] <- abs(tab5ab[[tag5a]] - tab5ab[[tag5b]])
+    tab4ab[[tag4a]] <- as.numeric(as.character(tab4ab[[tag4a]]))
+    tab4ab[[tag4b]] <- as.numeric(as.character(tab4ab[[tag4b]]))
+    ## Explicitly set all NA values as "0"
+    tab1ab[is.na(tab1ab)] <- 0
+    tab2ab[is.na(tab2ab)] <- 0
+    tab3ab[is.na(tab3ab)] <- 0
+    tab4ab[is.na(tab4ab)] <- 0
+    ## Get the absolute difference between columns
+    tab1ab[[tag1c]] <- abs(tab1ab[[tag1a]] - tab1ab[[tag1b]])
+    tab2ab[[tag2c]] <- abs(tab2ab[[tag2a]] - tab2ab[[tag2b]])
+    tab3ab[[tag3c]] <- abs(tab3ab[[tag3a]] - tab3ab[[tag3b]])
+    tab4ab[[tag4c]] <- abs(tab4ab[[tag4a]] - tab4ab[[tag4b]])
+    ## Change to percentages
+    tab1ab[[tag1a]] <- tab1ab[[tag1a]]*100
+    tab1ab[[tag1b]] <- tab1ab[[tag1b]]*100
+    tab1ab[[tag1c]] <- tab1ab[[tag1c]]*100
 
+    tab2ab[[tag2a]] <- tab2ab[[tag2a]]*100
+    tab2ab[[tag2b]] <- tab2ab[[tag2b]]*100
+    tab2ab[[tag2c]] <- tab2ab[[tag2c]]*100
 
-## Change to percentages
-tab1ab[[tag1a]] <- tab1ab[[tag1a]]*100
-tab1ab[[tag1b]] <- tab1ab[[tag1b]]*100
-tab1ab[[tag1c]] <- tab1ab[[tag1c]]*100
+    tab3ab[[tag3a]] <- tab3ab[[tag3a]]*100
+    tab3ab[[tag3b]] <- tab3ab[[tag3b]]*100
+    tab3ab[[tag3c]] <- tab3ab[[tag3c]]*100
 
-tab2ab[[tag2a]] <- tab2ab[[tag2a]]*100
-tab2ab[[tag2b]] <- tab2ab[[tag2b]]*100
-tab2ab[[tag2c]] <- tab2ab[[tag2c]]*100
+    tab4ab[[tag4a]] <- tab4ab[[tag4a]]*100
+    tab4ab[[tag4b]] <- tab4ab[[tag4b]]*100
+    tab4ab[[tag4c]] <- tab4ab[[tag4c]]*100
+    ## Get values > cutoff
+    ## UQ removes the string quotes
+    tab1ab_cut <- filter(tab1ab, UQ(as.name(tag1c)) > cutoff)
+    tab2ab_cut <- filter(tab2ab, UQ(as.name(tag2c)) > cutoff)
+    tab3ab_cut <- filter(tab3ab, UQ(as.name(tag3c)) > cutoff)
+    tab4ab_cut <- filter(tab4ab, UQ(as.name(tag4c)) > cutoff)
+    ## Limit to 4 sig figs after decimal
+    tab1ab_cleancut <- format(tab1ab_cut, digits=4)
+    tab2ab_cleancut <- format(tab2ab_cut, digits=4)
+    tab3ab_cleancut <- format(tab3ab_cut, digits=4)
+    tab4ab_cleancut <- format(tab4ab_cut, digits=4)
+} else if (sets == 5) { # Case of 5 files
+    ## Reading each file as a data.table.
+    ## Bonus - fread is much faster than read.csv
+    read1a <- fread(infile1a, header=TRUE)
+    read1b <- fread(infile1b, header=TRUE)
+    read2a <- fread(infile2a, header=TRUE)
+    read2b <- fread(infile2b, header=TRUE)
+    read3a <- fread(infile3a, header=TRUE)
+    read3b <- fread(infile3b, header=TRUE)
+    read4a <- fread(infile4a, header=TRUE)
+    read4b <- fread(infile4b, header=TRUE)
+    read5a <- fread(infile5a, header=TRUE)
+    read5b <- fread(infile5b, header=TRUE)
+    ## Force name the columns for ease of access
+    colnames(read1a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read1b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read2a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read2b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read3a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read3b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read4a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read4b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read5a) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    colnames(read5b) <- c("Index", "Acceptor", "Donor", "AvgFrac")
+    ## Drop the Index column
+    read1a <- within(read1a, rm(Index))
+    read1b <- within(read1b, rm(Index))
 
-tab3ab[[tag3a]] <- tab3ab[[tag3a]]*100
-tab3ab[[tag3b]] <- tab3ab[[tag3b]]*100
-tab3ab[[tag3c]] <- tab3ab[[tag3c]]*100
+    read2a <- within(read2a, rm(Index))
+    read2b <- within(read2b, rm(Index))
 
-#tab4ab[[tag4a]] <- tab4ab[[tag4a]]*100
-#tab4ab[[tag4b]] <- tab4ab[[tag4b]]*100
-#tab4ab[[tag4c]] <- tab4ab[[tag4c]]*100
+    read3a <- within(read3a, rm(Index))
+    read3b <- within(read3b, rm(Index))
 
-#tab5ab[[tag5a]] <- tab5ab[[tag5a]]*100
-#tab5ab[[tag5b]] <- tab5ab[[tag5b]]*100
-#tab5ab[[tag5c]] <- tab5ab[[tag5c]]*100
+    read4a <- within(read4a, rm(Index))
+    read4b <- within(read4b, rm(Index))
 
+    read5a <- within(read5a, rm(Index))
+    read5b <- within(read5b, rm(Index))
+    ## Rename the Average Frac Columns
+    read1a <- plyr:::rename(read1a, c("AvgFrac"=tag1a))
+    read1b <- plyr:::rename(read1b, c("AvgFrac"=tag1b))
 
-## Get values > cutoff
-## UQ removes the string quotes
-tab1ab_cut <- filter(tab1ab, UQ(as.name(tag1c)) > cutoff)
-tab2ab_cut <- filter(tab2ab, UQ(as.name(tag2c)) > cutoff)
-tab3ab_cut <- filter(tab3ab, UQ(as.name(tag3c)) > cutoff)
-#tab4ab_cut <- filter(tab4ab, UQ(as.name(tag4c)) > cutoff)
-#tab5ab_cut <- filter(tab5ab, UQ(as.name(tag5c)) > cutoff)
+    read2a <- plyr:::rename(read2a, c("AvgFrac"=tag2a))
+    read2b <- plyr:::rename(read2b, c("AvgFrac"=tag2b))
 
+    read3a <- plyr:::rename(read3a, c("AvgFrac"=tag3a))
+    read3b <- plyr:::rename(read3b, c("AvgFrac"=tag3b))
 
-## Limit to 4 sig figs after decimal
-tab1ab_cleancut <- format(tab1ab_cut, digits=4)
-tab2ab_cleancut <- format(tab2ab_cut, digits=4)
-tab3ab_cleancut <- format(tab3ab_cut, digits=4)
-#tab4ab_cleancut <- format(tab4ab_cut, digits=4)
-#tab5ab_cleancut <- format(tab5ab_cut, digits=4)
+    read4a <- plyr:::rename(read4a, c("AvgFrac"=tag4a))
+    read4b <- plyr:::rename(read4b, c("AvgFrac"=tag4b))
 
+    read5a <- plyr:::rename(read5a, c("AvgFrac"=tag5a))
+    read5b <- plyr:::rename(read5b, c("AvgFrac"=tag5b))
+    ## Merge the tables together
+    tab1ab <- merge(read1a, read1b, by=c("Acceptor","Donor"))
+    tab2ab <- merge(read2a, read2b, by=c("Acceptor","Donor"))
+    tab3ab <- merge(read3a, read3b, by=c("Acceptor","Donor"))
+    tab4ab <- merge(read4a, read4b, by=c("Acceptor","Donor"))
+    tab5ab <- merge(read5a, read4b, by=c("Acceptor","Donor"))
+    ## Treat the AvgFrac columns numerically
+    tab1ab[[tag1a]] <- as.numeric(as.character(tab1ab[[tag1a]]))
+    tab1ab[[tag1b]] <- as.numeric(as.character(tab1ab[[tag1b]]))
+
+    tab2ab[[tag2a]] <- as.numeric(as.character(tab2ab[[tag2a]]))
+    tab2ab[[tag2b]] <- as.numeric(as.character(tab2ab[[tag2b]]))
+
+    tab3ab[[tag3a]] <- as.numeric(as.character(tab3ab[[tag3a]]))
+    tab3ab[[tag3b]] <- as.numeric(as.character(tab3ab[[tag3b]]))
+
+    tab4ab[[tag4a]] <- as.numeric(as.character(tab4ab[[tag4a]]))
+    tab4ab[[tag4b]] <- as.numeric(as.character(tab4ab[[tag4b]]))
+
+    tab5ab[[tag5a]] <- as.numeric(as.character(tab5ab[[tag5a]]))
+    tab5ab[[tag5b]] <- as.numeric(as.character(tab5ab[[tag5b]]))
+    ## Explicitly set all NA values as "0"
+    tab1ab[is.na(tab1ab)] <- 0
+    tab2ab[is.na(tab2ab)] <- 0
+    tab3ab[is.na(tab3ab)] <- 0
+    tab4ab[is.na(tab4ab)] <- 0
+    tab5ab[is.na(tab5ab)] <- 0
+    ## Get the absolute difference between columns
+    tab1ab[[tag1c]] <- abs(tab1ab[[tag1a]] - tab1ab[[tag1b]])
+    tab2ab[[tag2c]] <- abs(tab2ab[[tag2a]] - tab2ab[[tag2b]])
+    tab3ab[[tag3c]] <- abs(tab3ab[[tag3a]] - tab3ab[[tag3b]])
+    tab4ab[[tag4c]] <- abs(tab4ab[[tag4a]] - tab4ab[[tag4b]])
+    tab5ab[[tag5c]] <- abs(tab5ab[[tag5a]] - tab5ab[[tag5b]])
+    ## Change to percentages
+    tab1ab[[tag1a]] <- tab1ab[[tag1a]]*100
+    tab1ab[[tag1b]] <- tab1ab[[tag1b]]*100
+    tab1ab[[tag1c]] <- tab1ab[[tag1c]]*100
+
+    tab2ab[[tag2a]] <- tab2ab[[tag2a]]*100
+    tab2ab[[tag2b]] <- tab2ab[[tag2b]]*100
+    tab2ab[[tag2c]] <- tab2ab[[tag2c]]*100
+
+    tab3ab[[tag3a]] <- tab3ab[[tag3a]]*100
+    tab3ab[[tag3b]] <- tab3ab[[tag3b]]*100
+    tab3ab[[tag3c]] <- tab3ab[[tag3c]]*100
+
+    tab4ab[[tag4a]] <- tab4ab[[tag4a]]*100
+    tab4ab[[tag4b]] <- tab4ab[[tag4b]]*100
+    tab4ab[[tag4c]] <- tab4ab[[tag4c]]*100
+
+    tab5ab[[tag5a]] <- tab5ab[[tag5a]]*100
+    tab5ab[[tag5b]] <- tab5ab[[tag5b]]*100
+    tab5ab[[tag5c]] <- tab5ab[[tag5c]]*100
+    ## Get values > cutoff
+    ## UQ removes the string quotes
+    tab1ab_cut <- filter(tab1ab, UQ(as.name(tag1c)) > cutoff)
+    tab2ab_cut <- filter(tab2ab, UQ(as.name(tag2c)) > cutoff)
+    tab3ab_cut <- filter(tab3ab, UQ(as.name(tag3c)) > cutoff)
+    tab4ab_cut <- filter(tab4ab, UQ(as.name(tag4c)) > cutoff)
+    tab5ab_cut <- filter(tab5ab, UQ(as.name(tag5c)) > cutoff)
+    ## Limit to 4 sig figs after decimal
+    tab1ab_cleancut <- format(tab1ab_cut, digits=4)
+    tab2ab_cleancut <- format(tab2ab_cut, digits=4)
+    tab3ab_cleancut <- format(tab3ab_cut, digits=4)
+    tab4ab_cleancut <- format(tab4ab_cut, digits=4)
+    tab5ab_cleancut <- format(tab5ab_cut, digits=4)
+} else { # > 5 files
+  stop(sprintf("Sorry, this is for 3-5 files. You gave me %s.
+       You'll have to modify the if statements for the file reads yourself.
+       Stopping now...", sets))
+}
 
 ## Now write a tab-delimited outfile!
 ## Don't care about the index rownames because that's the residue number
@@ -253,30 +508,38 @@ tab3ab_cleancut <- format(tab3ab_cut, digits=4)
 
 
 ## Merge all the datasets, keeping any blank columns
-#### Coment all this out if you're only doing 1 set ####
-
-## For 2 sets
-#tabcombo <- merge(tab1ab_cleancut, tab2ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
-
-## For 3 sets
-tabcomboA <- merge(tab1ab_cleancut, tab2ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
-tabcombo <- merge(tabcomboA, tab3ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
-
-## For 4 sets
-#tabcomboA <- merge(tab1ab_cleancut, tab2ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
-#tabcomboB <- merge(tabcomboA, tab3ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
-#tabcombo <- merge(tabcomboB, tab4ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
-
-## For 5 sets
-#tabcomboA <- merge(tab1ab_cleancut, tab2ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
-#tabcomboB <- merge(tabcomboA, tab3ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
-#tabcomboC <- merge(tabcomboB, tab4ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
-#tabcombo <- merge(tabcomboc, tab5ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
-
-## Change the <NA> values to dashes
-tabcombo[is.na(tabcombo)] <- "-"
-
-#### End of block to comment out for skipping if 1 ####
+#### This section is skipped if you're only doing 1 set ####
+if (sets < 1) { # Case of neg values???
+    stop(sprintf("I shouldn't have gotten this far.
+         Please check your %s sets. (Err <1)", sets))
+} else if (sets == 1) { # Case of 1 file
+    break
+} else if (sets == 2) { # Case of 2 files
+    tabcombo <- merge(tab1ab_cleancut, tab2ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
+    ## Change the <NA> values to dashes
+    tabcombo[is.na(tabcombo)] <- "-"
+} else if (sets == 3) { # Case of 3 files
+    tabcomboA <- merge(tab1ab_cleancut, tab2ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
+    tabcombo <- merge(tabcomboA, tab3ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
+    ## Change the <NA> values to dashes
+    tabcombo[is.na(tabcombo)] <- "-"
+} else if (sets == 4) { # Case of 4 files
+    tabcomboA <- merge(tab1ab_cleancut, tab2ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
+    tabcomboB <- merge(tabcomboA, tab3ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
+    tabcombo <- merge(tabcomboB, tab4ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
+    ## Change the <NA> values to dashes
+    tabcombo[is.na(tabcombo)] <- "-"
+} else if (sets == 5) { # Case of 5 files
+    tabcomboA <- merge(tab1ab_cleancut, tab2ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
+    tabcomboB <- merge(tabcomboA, tab3ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
+    tabcomboC <- merge(tabcomboB, tab4ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
+    tabcombo <- merge(tabcomboc, tab5ab_cleancut, by=c("Acceptor","Donor"), all=TRUE)
+    ## Change the <NA> values to dashes
+    tabcombo[is.na(tabcombo)] <- "-"
+} else { # > 5 files
+  stop(sprintf("I shouldn't have gotten this far.
+       Please check your %s sets. (Err >5)", sets))
+}
 
 ## Write a pseudo-fixed width outfile
 #capture.output( print(tabcombo, print.gap=3, row.names=FALSE), file = Tot_diff)

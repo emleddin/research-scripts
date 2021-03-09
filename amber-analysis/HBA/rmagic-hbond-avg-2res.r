@@ -7,7 +7,9 @@
 
 ## This script has been pre-built for a system with 3 replicates
 ## More or less than 3 reps (up to 5) can be achieved through
-## Commenting or uncommenting
+## Changing the `sets` number below.
+## For more than 5 reps, add in an `else if` statement in the `Read in`
+## block below.
 
 ## Paths to the Hbond-avg files
 ## Set A (system 1)
@@ -61,23 +63,50 @@ options(scipen = 999)
 #--Read in Hbond Scripts--#
 #-------------------------#
 
-## Reading each file as a data.table.
-## Bonus - fread is much faster than read.csv
-read1A <- fread(infile1A, header=TRUE)
-read2A <- fread(infile2A, header=TRUE)
-read3A <- fread(infile3A, header=TRUE)
-#read4A <- fread(infile4A, header=TRUE)
-#read5A <- fread(infile5A, header=TRUE)
-
-colnames(read1A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
-colnames(read2A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
-colnames(read3A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
-#colnames(read4A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
-#colnames(read5A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
-
-## Combine all the datasets into 1
-bound <- rbind(read1A, read2A, read3A)
-#bound <- rbind(read1A, read2A, read3A, read4A, read5A)
+## Deal with files if X present
+if (sets <= 2) { # Case if 1 or 2 files
+  stop(sprintf("You gave me %s file(s), which is less than 3 input files.
+       This is not the script for you because it does standard deviations.
+       Stopping now...", sets))
+} else if (sets == 3) { # Case of 3 files
+  ## Reading each file as a data.table.
+  ## Bonus - fread is much faster than read.csv
+  read1A <- fread(infile1A, header=TRUE)
+  read2A <- fread(infile2A, header=TRUE)
+  read3A <- fread(infile3A, header=TRUE)
+  ## Force name the columns for ease of access
+  colnames(read1A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
+  colnames(read2A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
+  colnames(read3A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
+  ## Combine all the datasets into 1
+  bound <- rbind(read1A, read2A, read3A)
+} else if (sets == 4) { # Case of 4 files
+  read1A <- fread(infile1A, header=TRUE)
+  read2A <- fread(infile2A, header=TRUE)
+  read3A <- fread(infile3A, header=TRUE)
+  read4A <- fread(infile4A, header=TRUE)
+  colnames(read1A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
+  colnames(read2A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
+  colnames(read3A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
+  colnames(read4A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
+  bound <- rbind(read1A, read2A, read3A, read4A)
+} else if (sets == 5) { # Case of 5 files
+  read1A <- fread(infile1A, header=TRUE)
+  read2A <- fread(infile2A, header=TRUE)
+  read3A <- fread(infile3A, header=TRUE)
+  read4A <- fread(infile4A, header=TRUE)
+  read5A <- fread(infile5A, header=TRUE)
+  colnames(read1A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
+  colnames(read2A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
+  colnames(read3A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
+  colnames(read4A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
+  colnames(read5A) <- c("Acceptor", "DonorH", "Donor", "Frames", "Frac", "AvgDist", "AvgAng")
+  bound <- rbind(read1A, read2A, read3A, read4A, read5A)
+} else { # > 5 files
+  stop(sprintf("Sorry, this is for 3-5 files. You gave me %s.
+       You'll have to modify the if statements for the file reads yourself.
+       Stopping now...", sets))
+}
 
 bound$Acceptor <- as.character(bound$Acceptor)
 bound$DonorH <- as.character(bound$DonorH)
