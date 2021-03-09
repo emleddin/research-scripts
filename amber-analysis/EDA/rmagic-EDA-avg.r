@@ -72,23 +72,58 @@ options(scipen = 999)
 ## This is skipped by R's fread by default to avoid
 ## Irregular header information
 
-## Reading each file as a data.table.
-## Bonus - fread is much faster than read.csv
-read1Ac <- fread(infile1Ac, header=FALSE)
-read2Ac <- fread(infile2Ac, header=FALSE)
-read3Ac <- fread(infile3Ac, header=FALSE)
-#read4Ac <- fread(infile4Ac, header=FALSE)
-#read5Ac <- fread(infile5Ac, header=FALSE)
-
-colnames(read1Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
-colnames(read2Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
-colnames(read3Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
-#colnames(read4Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
-#colnames(read5Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
-
-## Combine all the datasets into 1
-bound <- rbind(read1Ac, read2Ac, read3Ac)
-#bound <- rbind(read1Ac, read2Ac, read3Ac, read4Ac, read5Ac)
+## Deal with sets if X present
+if (sets <= 2) { # Case if 1 or 2 files
+  stop(sprintf("You gave me %s file(s), which is less than 3 input files.
+       This is not the script for you because it does standard deviations.
+       Stopping now...", sets))
+} else if (sets == 3) { # Case of 3 files
+    ## Reading each file as a data.table.
+    ## Bonus - fread is much faster than read.csv
+    read1Ac <- fread(infile1Ac, header=FALSE)
+    read2Ac <- fread(infile2Ac, header=FALSE)
+    read3Ac <- fread(infile3Ac, header=FALSE)
+    ## Force name the columns for ease of access
+    colnames(read1Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
+    colnames(read2Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
+    colnames(read3Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
+    ## Combine all the datasets into 1
+    bound <- rbind(read1Ac, read2Ac, read3Ac)
+} else if (sets == 4) { # Case of 4 files
+    ## Reading each file as a data.table.
+    ## Bonus - fread is much faster than read.csv
+    read1Ac <- fread(infile1Ac, header=FALSE)
+    read2Ac <- fread(infile2Ac, header=FALSE)
+    read3Ac <- fread(infile3Ac, header=FALSE)
+    read4Ac <- fread(infile4Ac, header=FALSE)
+    ## Force name the columns for ease of access
+    colnames(read1Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
+    colnames(read2Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
+    colnames(read3Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
+    colnames(read4Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
+    ## Combine all the datasets into 1
+    bound <- rbind(read1Ac, read2Ac, read3Ac, read4Ac)
+} else if (sets == 5) { # Case of 5 files
+    ## Reading each file as a data.table.
+    ## Bonus - fread is much faster than read.csv
+    read1Ac <- fread(infile1Ac, header=FALSE)
+    read2Ac <- fread(infile2Ac, header=FALSE)
+    read3Ac <- fread(infile3Ac, header=FALSE)
+    read4Ac <- fread(infile4Ac, header=FALSE)
+    read5Ac <- fread(infile5Ac, header=FALSE)
+    ## Force name the columns for ease of access
+    colnames(read1Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
+    colnames(read2Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
+    colnames(read3Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
+    colnames(read4Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
+    colnames(read5Ac) <- c("Index", "ResidueA", "ResidueB", "Coulomb", "StdErr")
+    ## Combine all the datasets into 1
+    bound <- rbind(read1Ac, read2Ac, read3Ac, read4Ac, read5Ac)
+} else { # > 5 files
+  stop(sprintf("Sorry, this is for 3-5 files. You gave me %s.
+       You'll have to modify the if statements for the file reads yourself.
+       Stopping now...", sets))
+}
 
 ## Add in a blank row of the match for future plotting needs
 extra <- data.frame(0, ROI, ROI, 0, 0)
@@ -163,23 +198,58 @@ sink()
 ## This is skipped by R's fread by default to avoid
 ## Irregular header information
 
-## Reading each file as a data.table.
-## Bonus - fread is much faster than read.csv
-read1Av <- fread(infile1Av, header=FALSE)
-read2Av <- fread(infile2Av, header=FALSE)
-read3Av <- fread(infile3Av, header=FALSE)
-#read4Av <- fread(infile4Av, header=FALSE)
-#read5Av <- fread(infile5Av, header=FALSE)
-
-colnames(read1Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
-colnames(read2Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
-colnames(read3Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
-#colnames(read4Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
-#colnames(read5Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
-
-## Combine all the datasets into 1
-bound <- rbind(read1Av, read2Av, read3Av)
-#bound <- rbind(read1Av, read2Av, read3Av, read4Av, read5Av)
+## Deal with sets if X present
+if (sets <= 2) { # Case if 1 or 2 files
+  stop(sprintf("You gave me %s file(s), which is less than 3 input files.
+       This is not the script for you because it does standard deviations.
+       Stopping now...", sets))
+} else if (sets == 3) { # Case of 3 files
+    ## Reading each file as a data.table.
+    ## Bonus - fread is much faster than read.csv
+    read1Av <- fread(infile1Av, header=FALSE)
+    read2Av <- fread(infile2Av, header=FALSE)
+    read3Av <- fread(infile3Av, header=FALSE)
+    ## Force name the columns for ease of access
+    colnames(read1Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
+    colnames(read2Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
+    colnames(read3Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
+    ## Combine all the datasets into 1
+    bound <- rbind(read1Av, read2Av, read3Av)
+} else if (sets == 4) { # Case of 4 files
+    ## Reading each file as a data.table.
+    ## Bonus - fread is much faster than read.csv
+    read1Av <- fread(infile1Av, header=FALSE)
+    read2Av <- fread(infile2Av, header=FALSE)
+    read3Av <- fread(infile3Av, header=FALSE)
+    read4Av <- fread(infile4Av, header=FALSE)
+    ## Force name the columns for ease of access
+    colnames(read1Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
+    colnames(read2Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
+    colnames(read3Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
+    colnames(read4Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
+    ## Combine all the datasets into 1
+    bound <- rbind(read1Av, read2Av, read3Av, read4Av)
+} else if (sets == 5) { # Case of 5 files
+    ## Reading each file as a data.table.
+    ## Bonus - fread is much faster than read.csv
+    read1Av <- fread(infile1Av, header=FALSE)
+    read2Av <- fread(infile2Av, header=FALSE)
+    read3Av <- fread(infile3Av, header=FALSE)
+    read4Av <- fread(infile4Av, header=FALSE)
+    read5Av <- fread(infile5Av, header=FALSE)
+    ## Force name the columns for ease of access
+    colnames(read1Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
+    colnames(read2Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
+    colnames(read3Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
+    colnames(read4Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
+    colnames(read5Av) <- c("Index", "ResidueA", "ResidueB", "VdW", "StdErr")
+    ## Combine all the datasets into 1
+    bound <- rbind(read1Av, read2Av, read3Av, read4Av, read5Av)
+} else { # > 5 files
+  stop(sprintf("Sorry, this is for 3-5 files. You gave me %s.
+       You'll have to modify the if statements for the file reads yourself.
+       Stopping now...", sets))
+}
 
 ## Add in a blank row of the match for future plotting needs
 extra <- data.frame(0, ROI, ROI, 0, 0)

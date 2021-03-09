@@ -1,19 +1,18 @@
-## Run this with "Rscript rmagic-EDA-avg.r"
+## Run this with "Rscript rmagic-EDA-single-run.r"
 ## (Assuming you've already installed R...)
 
 #-------------------------------------------#
 #--Specify the paths to the Files from EDA--#
 #-------------------------------------------#
 
-## This script has been pre-built for a system with 3 replicates
-## More or less than 3 reps (up to 5) can be achieved through
-## Commenting or uncommenting
+## This script is for processing the data from a single run of EDA
+## (not replicates)
 
-## Paths to the fort.803 (Coul) files
+## Paths to the fort.803 or fort_coulomb_interaction.dat (Coul) file
 ## Set A (system 1)
 infile1Ac <- Sys.glob("/absolute/path/to/the/analysis/files/for/WT-System-1/fort.803")
 
-## Paths to the fort.806 (VdW) files
+## Paths to the fort.806 or fort_vdw_interaction.dat (VdW) file
 ## Set A (system A)
 infile1Av <- Sys.glob("/absolute/path/to/the/analysis/files/for/WT-System-1/fort.806")
 

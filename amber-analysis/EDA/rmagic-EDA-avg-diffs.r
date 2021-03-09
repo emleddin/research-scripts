@@ -5,9 +5,8 @@
 #-----Specify the paths to the Files from rmagic-EDA-avg.r-----#
 #--------------------------------------------------------------#
 
-## This script has been pre-built for 2 systems with 3 replicates
-## More or less than 3 reps (up to 5) can be achieved through
-## Commenting or uncommenting
+## This script has been pre-built for 2 systems that have gone through 
+## `rmagic-EDA-avg.r` (meaning there were replicates originally)
 
 ## Paths to the -tot- files
 ## Set A (system 1)
