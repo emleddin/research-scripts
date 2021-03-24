@@ -148,7 +148,7 @@ plt.setp([a.get_xticklabels() for a in f.axes[:-1]], visible=False)
 plt.xlim(0, tot_res)
 
 ## Add labels (use ax3 to center on y-axis)
-ax3.set_ylabel('Energy (kcal/mol)')
+ax3.set_ylabel('$\Delta\Delta$E (kcal/mol)')
 plt.xlabel('Residue Number')
 
 ## Put those xticks on the plot

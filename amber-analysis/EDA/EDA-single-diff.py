@@ -92,7 +92,7 @@ ax.set_xticklabels(labelsx2, fontdict=None, minor=False)
 ax.set_xlim(0, tot_res)
 ax.tick_params(axis='both', which='major', pad=10, length=10)
 
-plt.ylabel('Energy (kcal/mol)')
+plt.ylabel('$\Delta\Delta$E (kcal/mol)')
 plt.xlabel('Residue Number')
 
 if error_bars == False:
