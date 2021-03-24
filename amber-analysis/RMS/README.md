@@ -4,6 +4,12 @@ These scripts pertain to root mean square analyses (such as deviation and
 fluctuation) of protein complexes.
 Total number of hydrogen bonds are also included.
 
+## `align-traj.py`
+A `python3` script will align a structure to a reference and can be used to
+select out certain atoms.
+As written, it will select all water residues within a specific distance
+sphere of a specific residue.
+
 ## `avg-rmsd-etc.gnu`
 A `gnuplot` script for graphing the RMSD, RMSF, and average hydrogen bond data
 and standard deviations generated using `rmagic-rmsd-rmsf-hbond-5.r`.
@@ -35,6 +41,12 @@ on the previous 1 ns; RMSD is plotted as given.
 The `frame2ns` variable converts Frame number column to time in nanoseconds
 using a multiplier (in this case, 1/500).
 It likely will not be `500`, depending on what you used for you mdin files.
+
+## `natoms-in-range.py`
+A `python3` script for plotting the number of a specific type of ion within
+a range of a residue or protein throughout the course of a simulation.
+This is not intended to determine which ion, specifically, is that location,
+just total the type.
 
 ## Rendered Examples
 This directory has examples of the Python and Gnuplot figures made from the
