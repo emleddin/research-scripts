@@ -23,3 +23,9 @@ file3
 ...
 fileX"
 ```
+
+## `2SA-plot-fix.py`
+This is a Python version of the script to modify the secondary structure
+gnuplot script that `cpptraj` generates.
+It is much faster than the bash version.
+You will want to remember to modify the `ytics` of the residue range.

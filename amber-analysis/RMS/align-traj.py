@@ -31,5 +31,5 @@ align.alignto(fin_frame, ref, select="name CA", match_atoms=True)
 ## Select any water residues within given range + the residue range
 struct_wat = fin_frame.select_atoms(wat_range + " or " + res_range)
 ​
-## Write the output PDB
-struct_wat.write(out_pdb)
+## Write the output PDB without CONECT lines
+struct_wat.write(out_pdb, bonds=None)
