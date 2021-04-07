@@ -61,6 +61,12 @@ This script can be used to map differences in the Coulomb and van der Waals
 energies onto the protein structure using Chimera.
 It calls the file created using `rmagic-EDA-avg-diffs.r`.
 
+### `EDA-sums.py`
+This script sums up all the residues from `rmagic-EDA-avg.r` and prints them
+out as a nice summary file.
+It's useful for getting all a total interaction between the residue and protein
+for evaluating the stability of a mutant.
+
 ## Plotting the Processed Data
 
 ### `EDA-bar-comp.py`
