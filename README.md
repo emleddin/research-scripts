@@ -23,6 +23,10 @@ simulations.
 This directory contains a collection of scripts for preparing systems and
 running simulations with AMBER MD.
 
+## gromacs-analysis
+This directory contains different scripts relevant to analyzing GROMACS MD
+simulations.
+
 ## gromacs-setup
 This directory contains scripts to help prepare and run GROMACS simulations
 using AMBER force fields.
