@@ -31,6 +31,9 @@ Example scripts for running `cpptraj`.
 These scripts pertain to matrix correlation analysis (instances of correlation,
 anti-correlation, and no correlation between residues).
 
+## network-analysis
+Contains a script for processing cluster-based data from network analysis.
+
 ## `residuenumbers.sh`
 A `bash` script for writing out the residue numbers used by biologists so
 that they can be "keyed" to the ones in the AMBER PDB file that starts at 1.
