@@ -123,7 +123,7 @@ def read_adjusted_PDB(adj_qm_pdb_mda, all_QM):
 
 def integrate_movements(system, all_QM, all_QM_ag_adj, lichem_out_xyz):
     """
-    Load in the PDB file with manipulated atom coordinates.
+    Generate the XYZ file with the replacement QM atom coordinates.
 
     Parameters
     ----------

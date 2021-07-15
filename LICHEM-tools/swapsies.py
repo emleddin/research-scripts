@@ -1,8 +1,19 @@
 import MDAnalysis as mda
 
-lichem_in_xyz="reactant_optimization_output.xyz"
-out_qm_pdb_mda="reactant-qm-mda.pdb"
+## Swapsies: Put the product QM in the reactant MM and reoptimize the product
+lichem_rxt_in_xyz="reactant_optimization_output.xyz"
+lichem_prod_in_xyz="product_optimization_output.xyz"
 regions_file="regions.inp"
+out_qm_prod_pdb_mda="product-qm-mda.pdb"
+lichem_out_prod_qm_rxt_mm_xyz="xyzfile.xyz"
+
+## Reverse Swapsies: Put reactant QM in the product MM and reopt the reactant
+## Switch the commenting at the end of the script for this option!!!
+#lichem_rxt_in_xyz="reactant_optimization_output.xyz"
+#lichem_prod_in_xyz="product_optimization_output.xyz"
+#regions_file="regions.inp"
+#out_qm_rxt_pdb_mda="reactant-qm-mda.pdb"
+#lichem_out_rxt_qm_prod_mm_xyz="xyzfile.xyz"
 
 ## Use a set: https://stackoverflow.com/questions/740287/how-to-check-if-one-of-the-following-items-is-in-a-list
 ## Between two strings: https://stackoverflow.com/questions/36559356/extract-values-between-two-strings-in-a-text-file
@@ -125,8 +136,73 @@ def write_qm_pdb(system, out_qm_pdb_mda, all_QM):
     all_QM_ag.write(out_qm_pdb_mda)
     return all_QM_ag
 
+def read_adjusted_PDB(adj_qm_pdb_mda, all_QM):
+    """
+    Load in the PDB file with replacement QM atom coordinates.
+
+    Parameters
+    ----------
+    adj_qm_pdb_mda : str
+        A PDB file with the QM atoms from the `system` final frame.
+    all_QM : list
+        A list of the QM atom indices.
+
+    Returns
+    -----
+    adj_pdb : MDAnalysis.core.universe.Universe
+        The manipulated PDB file.
+    all_QM_ag_adj : MDAnalysis.core.universe.Universe
+        A copy of adj_pdb.
+    """
+    adj_pdb = mda.Universe(adj_qm_pdb_mda, format="PDB", dt=1.0, in_memory=True)
+    all_QM_ag_adj = adj_pdb.copy()
+    return adj_pdb, all_QM_ag_adj
+
+def integrate_movements(system, all_QM, all_QM_ag_adj, lichem_out_xyz):
+    """
+    Generate the XYZ file with the replacement QM atom coordinates.
+
+    Parameters
+    ----------
+    system : MDAnalysis.core.universe.Universe
+        The LICHEM XYZ.
+    all_QM : list
+        List of all the indices for atoms in the QM region.
+    all_QM_ag_adj : MDAnalysis.core.universe.Universe
+        A copy of adj_pdb.
+    lichem_out_xyz : str
+
+    Saves
+    -----
+    lichem_out_xyz : XYZ file
+        An XYZ file with the updated QM coordinates.
+    """
+    all_QM_ag = mda.AtomGroup(all_QM, system)
+    all_QM_ag.atoms.positions = all_QM_ag_adj.atoms.positions
+    system.atoms.write(lichem_out_xyz, remark='')
+
 ## Run the script!
 
+## -- For Swapsies
+## Read the product and get the QM atoms
 all_QM = readreg(regions_file)
-system = load_XYZ(lichem_in_xyz)
-all_QM_ag = write_qm_pdb(system, out_qm_pdb_mda, all_QM)
+product = load_XYZ(lichem_prod_in_xyz)
+all_QM_ag = write_qm_pdb(product, out_qm_prod_pdb_mda, all_QM)
+
+## Put the product QM into the reactant
+reactant = load_XYZ(lichem_rxt_in_xyz)
+adj_pdb, all_QM_ag_adj = read_adjusted_PDB(out_qm_prod_pdb_mda, all_QM)
+integrate_movements(reactant, all_QM, all_QM_ag_adj, lichem_out_prod_qm_rxt_mm_xyz)
+
+#-----------------------------------------------------------------------------#
+
+#--- For Reverse Swapsies
+## Read the reactant and get the QM atoms
+#all_QM = readreg(regions_file)
+#reactant = load_XYZ(lichem_rxt_in_xyz)
+#all_QM_ag = write_qm_pdb(reactant, out_qm_rxt_pdb_mda, all_QM)
+#
+### Put the reactant QM into the product
+#product = load_XYZ(lichem_prod_in_xyz)
+#adj_pdb, all_QM_ag_adj = read_adjusted_PDB(out_qm_rxt_pdb_mda, all_QM)
+#integrate_movements(product, all_QM, all_QM_ag_adj, lichem_out_rxt_qm_prod_mm_xyz)
