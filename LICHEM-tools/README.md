@@ -15,13 +15,17 @@ selection language.
 With atom selection commands, you can explicitly list the atoms in your QM
 region using whatever means is most logical to you.
 
+## `qsm-energy-diagram.py`
+This script parses the QSM output file and plots the initial and final reaction
+coordinates.
+
 ## `swapsies.py`
 This script is a combination of `mda-qm-part1.py` and `mda-qm-part2.py`.
 "Swapsies" is putting the product QM region into the reactant MM prior to
 reoptimizing the product, likely because the MM environment migrated a lot
 between independent reactant and product optimizations.
 The script takes in the regions file and the reactant and product XYZ files.
-From there, it creates a PDB of the replacing QM atoms, and puts those in the 
+From there, it creates a PDB of the replacing QM atoms, and puts those in the
 other XYZ. Snip snip! :scissors: :smiley:
 
 The commands for "Reverse Swapsies" (reactant QM in product MM) are also
