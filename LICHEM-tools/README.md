@@ -31,6 +31,20 @@ other XYZ. Snip snip! :scissors: :smiley:
 The commands for "Reverse Swapsies" (reactant QM in product MM) are also
 provided as comments.
 
+## `vmd-regions.py`
+This script parses the `regions.inp` file and creates VMD macros for:
+- QM atoms: `qm`, `QM`, `quantum`
+- Pseudobond atoms: `pseudobond`, `pb`, `pseudo`,
+- Boundary atoms: `boundary`, `bound`
+- Frozen: `frozen`, `f`
+- Unfrozen atoms: `unfrozen`, `f`
+
+You can then read in the resulting file with your XYZ:
+```
+vmd -xyz LICHEM_output.xyz -e vmd-selections.vmd
+```
+and use those keywords under `Selected Atoms` in the representations menu.
+
 ## Ways to Center a Structure on the Origin
 Using `cpptraj` to write out a file without the `center :1-XXX origin mass`
 command means that the snapshot will likely not have the protein's center of
