@@ -21,7 +21,7 @@ coordinates.
 
 ## `swapsies.py`
 This script is a combination of `mda-qm-part1.py` and `mda-qm-part2.py`.
-"Swapsies" is putting the product QM region into the reactant MM prior to
+"Swapsies"<sup>*</sup> is putting the product QM region into the reactant MM prior to
 reoptimizing the product, likely because the MM environment migrated a lot
 between independent reactant and product optimizations.
 The script takes in the regions file and the reactant and product XYZ files.
@@ -30,6 +30,8 @@ other XYZ. Snip snip! :scissors: :smiley:
 
 The commands for "Reverse Swapsies" (reactant QM in product MM) are also
 provided as comments.
+
+> *: "Swapsies" was coined by the esteemed [Madison](MadisonB14).
 
 ## `vmd-regions.py`
 This script parses the `regions.inp` file and creates VMD macros for:
