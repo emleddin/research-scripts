@@ -8,16 +8,16 @@ VMD and LICHEM use one numbering system, whereas TINKER uses another.
 This script provides a skeleton for building a `regions.inp` to be used
 with LICHEM, as well as a file mapping the `BASIS` file to the numbering in
 VMD and TINKER.
-It needs heavy modification to make it apply to your QM/MM system, because you
-need to define the unique QM region.
+The `select_QM` function needs heavy modification to make it apply to your
+QM/MM system, because you need to define the unique QM region.
 The benefit to scripting this process is being able to use the MDAnalysis
 selection language.
 With atom selection commands, you can explicitly list the atoms in your QM
 region using whatever means is most logical to you.
 
 ## `qsm-energy-diagram.py`
-This script parses the QSM output file and plots the initial and final reaction
-coordinates.
+This script parses the QSM output file and creates figures of plots for the
+initial and final reaction coordinates.
 
 ## `swapsies.py`
 This script is a combination of `mda-qm-part1.py` and `mda-qm-part2.py`.
@@ -39,7 +39,7 @@ This script parses the `regions.inp` file and creates VMD macros for:
 - Pseudobond atoms: `pseudobond`, `pb`, `pseudo`,
 - Boundary atoms: `boundary`, `bound`
 - Frozen: `frozen`, `f`
-- Unfrozen atoms: `unfrozen`, `f`
+- Unfrozen atoms: `unfrozen`, `uf`
 
 You can then read in the resulting file with your XYZ:
 ```

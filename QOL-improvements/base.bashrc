@@ -82,6 +82,20 @@ mysub () {
     echo "${1} - ${2}" | bc -l
 }
 
+## Get Threshold Values
+# thresh blah.dat Column GT|LT Threshold
+# Same idea as `awk '$col <=|>= thresh' blah.dat`
+function thresh() {
+   col=$[$2-1]
+   if [[ $3 == "GT" ]]; then
+   cat $1 | perl -slane 'print if $F[$colnum] >= $valnum' -- -colnum=$col -valnum=$4
+   elif [[ $3 == "LT" ]]; then
+   cat $1 | perl -slane 'print if $F[$colnum] <= $valnum' -- -colnum=$col -valnum=$4
+   else
+   echo "Use GT for greater than and LT for less than."
+   fi
+}
+
 ## Open the direct folder as an argument
 ## Change the parts in <>
 sftp_comp () {
