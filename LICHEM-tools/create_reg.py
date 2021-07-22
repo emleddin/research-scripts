@@ -10,6 +10,16 @@ shell_center=1234
 ## Did you use the index from VMD for the shell_center? If yes, set True
 VMD_index_shell=False
 
+## Specify AMBER (aka "CHARGES" for LICHEM) or AMOEBA
+electro="AMBER"
+## Starting criteria -- loose, medium, or tight
+criteria="tight"
+## Set the QM parameters for the resulting regions file!
+method="B3LYP"
+mem="80 GB"
+charge="-4"
+spin="1"
+
 def get_box(orig_pdb):
     """
     Determines the box size from the PDB for the regions file.
@@ -89,7 +99,7 @@ def select_QM(system, shell_center):
     """
     Select the QM atoms using the atom selection language of MDAnalysis.
 
-    Paramters
+    Parameters
     ---------
     system : MDAnalysis.core.universe.Universe
         The Tinker XYZ information mapped onto a PDB topology.
@@ -250,7 +260,8 @@ def select_QM(system, shell_center):
     print("There are {} total frozen atoms.\n".format(len(all_FR)))
     return all_QM, all_BA, all_PB, all_FR
 
-def make_regions(x_box, y_box, z_box, all_QM, all_PB, all_BA, all_FR):
+def make_regions(x_box, y_box, z_box, all_QM, all_PB, all_BA, all_FR, electro,\
+     criteria, method, mem, charge, spin):
     """
     Generates the regions.inp file. The quantum, pseudobond, boundary, and
     frozen atom lists are formmated for printing in 10 columns.
@@ -268,6 +279,10 @@ def make_regions(x_box, y_box, z_box, all_QM, all_PB, all_BA, all_FR):
     all_FR : list
         A list of all of the frozen atoms.
     """
+    ##
+    electro = electro.upper()
+    criteria = criteria.lower()
+    #
     nc = 10 ## Number of columns to print
     QM_len = (len(all_QM)-(len(all_QM)%(nc)))+(nc)
     QM_range = QM_len//(nc)
@@ -289,26 +304,44 @@ def make_regions(x_box, y_box, z_box, all_QM, all_PB, all_BA, all_FR):
         reg_out.write("QM_type: g16\n")
         # to match current
         reg_out.write("!QM_type:Gaussian\n")
-        reg_out.write("QM_method: B3LYP\n")
+        reg_out.write("QM_method: {}\n".format(method))
         reg_out.write("QM_basis: GEN\n")
-        reg_out.write("QM_memory: 80 GB\n")
-        reg_out.write("QM_charge: -4\n")
-        reg_out.write("QM_spin: 1\n")
+        reg_out.write("QM_memory: {}\n".format(mem))
+        reg_out.write("QM_charge: {}\n".format(charge))
+        reg_out.write("QM_spin: {}\n".format(spin))
         reg_out.write("MM_type: TINKER\n")
-        reg_out.write("Electrostatics: CHARGES\n")
+        if electro == "AMBER" or "CHARGES":
+            reg_out.write("Electrostatics: CHARGES\n")
+        elif electro == "AMOEBA":
+            reg_out.write("Electrostatics: AMOEBA\n")
         reg_out.write("Calculation_type: SP\n")
         reg_out.write("Opt_stepsize: 0.50\n")
         reg_out.write("Max_stepsize: 0.10\n")
-        reg_out.write("qm_opt_tolerance: 1e-3\n")
-        reg_out.write("qm_rms_force_tol: 0.010\n")
-        reg_out.write("qm_max_force_tol: 0.020\n")
-        reg_out.write("mm_opt_tolerance: 1e-1\n")
-        reg_out.write("max_opt_steps: 10\n")
-        reg_out.write("max_qm_steps: 10\n")
+        if criteria == "loose":
+            reg_out.write("qm_opt_tolerance: 0.15\n")
+            reg_out.write("qm_rms_force_tol: 0.10\n")
+            reg_out.write("qm_max_force_tol: 0.020\n")
+            reg_out.write("mm_opt_tolerance: 0.20\n")
+        elif criteria == "medium":
+            reg_out.write("qm_opt_tolerance: 0.05\n")
+            reg_out.write("qm_rms_force_tol: 0.010\n")
+            reg_out.write("qm_max_force_tol: 0.015\n")
+            reg_out.write("mm_opt_tolerance: 0.05\n")
+        elif criteria == "tight":
+            reg_out.write("qm_opt_tolerance: 0.001\n")
+            reg_out.write("qm_rms_force_tol: 0.005\n")
+            reg_out.write("qm_max_force_tol: 0.015\n")
+            reg_out.write("mm_opt_tolerance: 0.01\n")
+        reg_out.write("max_opt_steps: 30\n")
+        reg_out.write("max_qm_steps: 15\n")
         reg_out.write("PBC: Yes\n")
         reg_out.write("Box_size: {:.6f} {:.6f} {:.6f}\n".format(x_box, y_box, z_box))
         reg_out.write("Use_LREC: Yes\n")
         reg_out.write("LREC_cut: 25.0\n")
+        if electro == "AMBER":
+            reg_out.write("LREC_exponent: 2\n")
+        elif electro == "AMOEBA":
+            reg_out.write("LREC_exponent: 3\n")
         reg_out.write("Use_Ewald: Yes\n")
         reg_out.write("Keep_files: Yes\n")
         reg_out.write("QM_atoms: {}\n".format(len(all_QM)))
@@ -360,7 +393,8 @@ shell_center = check_shell(shell_center, VMD_index_shell)
 all_QM, all_BA, all_PB, all_FR = select_QM(system, shell_center)
 
 ## Make the regions file
-make_regions(x_box, y_box, z_box, all_QM, all_PB, all_BA, all_FR)
+make_regions(x_box, y_box, z_box, all_QM, all_PB, all_BA, all_FR, electro, \
+ criteria, method, mem, charge, spin)
 
 ## Create a key between the regions file IDs and the BASIS numbering
 map_BASIS(all_QM, all_PB)
