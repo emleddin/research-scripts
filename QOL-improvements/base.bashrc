@@ -82,6 +82,11 @@ mysub () {
     echo "${1} - ${2}" | bc -l
 }
 
+## Convert Hartree/Bohr to au/Angstrom
+aa2hb () {
+    echo "${1} / 1.889" | bc -l
+}
+
 ## Get Threshold Values
 # thresh blah.dat Column GT|LT Threshold
 # Same idea as `awk '$col <=|>= thresh' blah.dat`
