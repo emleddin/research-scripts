@@ -6,10 +6,14 @@ This directory contains a number of scripts for working with
 ## `create-reg.py`
 VMD and LICHEM use one numbering system, whereas TINKER uses another.
 This script provides a skeleton for building a `regions.inp` to be used
-with LICHEM, as well as a file mapping the `BASIS` file to the numbering in
-VMD and TINKER.
+with LICHEM, as well as the `BASIS` file.
+A file mapping the `BASIS` file to the numbering in VMD and TINKER, and the
+respective assignments will be created (`BASIS_verification.txt`).
+
 The `select_QM` function needs heavy modification to make it apply to your
 QM/MM system, because you need to define the unique QM region.
+The `select_higher_basis` function also needs to me modified, so that the atoms
+needing a higher level of theory can be specified.
 The benefit to scripting this process is being able to use the MDAnalysis
 selection language.
 With atom selection commands, you can explicitly list the atoms in your QM
@@ -18,6 +22,21 @@ region using whatever means is most logical to you.
 ## `qsm-energy-diagram.py`
 This script parses the QSM output file and creates figures of plots for the
 initial and final reaction coordinates.
+
+## `stitching.py`
+This script creates a complete `BeadStartStruct.xyz` from two individual
+`BeadStartStruct.xyz` files.
+This way you can build one path between the reactant and intermediate, and
+a second path between the intermediate and the product.
+
+> **Example Case**
+> ```bash
+> $ lichem -path -b 9 -r reactant.xyz -p intermediate.xyz
+> $ mv BeadStartStruct.xyz react-int-BSS.xyz
+> $ lichem -path -b 9 -r intermediate.xyz -p product.xyz
+> $ mv BeadStartStruct.xyz int-prod-BSS.xyz
+> $ python3 stitching.py
+> ```
 
 ## `swapsies.py`
 This script is a combination of `mda-qm-part1.py` and `mda-qm-part2.py`.
