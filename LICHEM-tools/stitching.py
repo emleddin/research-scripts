@@ -88,9 +88,9 @@ def stitch_xyzs(r_i_xyz, r_i_natom, r_i_beads, i_p_xyz, i_p_natom, i_p_beads, \
     i_p_atoms_per_bead = i_p_natom / i_p_beads
     #
     if r_i_atoms_per_bead != i_p_atoms_per_bead:
-        raise ValueError("r_i has {r_i_atoms_per_bead} and i_p has {i_p_atoms_per_bead} atoms per bead.")
-        print("For some reason, your r_i structure and your i_p structure")
-        print("do not have the same number of atoms in each bead. Try remaking them.\n")
+        raise ValueError(f"r_i has {r_i_atoms_per_bead} and i_p has {i_p_atoms_per_bead} atoms per bead.\n"+
+        "For some reason, your r_i structure and your i_p structure\n" +
+        "do not have the same number of atoms in each bead. Try remaking them.\n")
     #
     ## Ignore the intermediate when writing the first time to ensure it's only
     ## written once!
@@ -101,8 +101,9 @@ def stitch_xyzs(r_i_xyz, r_i_natom, r_i_beads, i_p_xyz, i_p_natom, i_p_beads, \
     overall_natoms = r_atoms_write + i_p_natom
     tot_bead_natoms = r_i_atoms_per_bead * tot_beads
     if overall_natoms != tot_bead_natoms:
-        raise ValueError("Either the number of beads specified to the script or")
-        print("the number of atoms in the structure may be incorrect.\n")
+        raise ValueError("Either the number of beads specified to the script\n" +
+        "or the number of atoms in the structure may be incorrect.\n"+
+        f"Total beads: {tot_beads}, Overall natoms: {overall_natoms}\n")
     #
     with open("BeadStartStruct.xyz", "w+") as bss_out:
         ## Write the new natom line
