@@ -13,7 +13,7 @@ def readreg(regions_file):
     all_QM : list
         List of all the indices for atoms in the QM region.
     all_PB : list
-        List of all the indices for the psuedobond atoms.
+        List of all the indices for the pseudobond atoms.
     all_boundary : list
         List of all the indices for the boundary atoms.
     all_frozen : list
@@ -158,7 +158,7 @@ def write_vmd_selections(all_QM, all_PB, all_boundary, all_frozen, vmd_filename)
         for i in range(len(all_QM)):
             f.write("{} ".format(all_QM[i]))
         f.write("}\n\n")
-        f.write("atomselect macro psuedobond {index ")
+        f.write("atomselect macro pseudobond {index ")
         for i in range(len(all_PB)):
             f.write("{} ".format(all_PB[i]))
         f.write("}\n\n")
@@ -166,7 +166,7 @@ def write_vmd_selections(all_QM, all_PB, all_boundary, all_frozen, vmd_filename)
         for i in range(len(all_PB)):
             f.write("{} ".format(all_PB[i]))
         f.write("}\n\n")
-        f.write("atomselect macro psuedo {index ")
+        f.write("atomselect macro pseudo {index ")
         for i in range(len(all_PB)):
             f.write("{} ".format(all_PB[i]))
         f.write("}\n\n")
