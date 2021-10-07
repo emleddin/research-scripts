@@ -6,6 +6,11 @@
 #PBS -o err.error         ## Write printed errors to a file titled err.error
 #PBS -N WT_prot_sys       ## Name of the job to appear in queue
 
+## Copy final _init*.rst7 as _md0.rst7
+sys=WT_protein_system_wat
+prm=${sys}.prmtop
+
+## What GPU card to run on
 export CUDA_VISIBLE_DEVICES=4
 
 cd $PBS_O_WORKDIR
@@ -17,17 +22,19 @@ module load amber/19-cuda_serial
 e=0
 f=1
 
-while [ $f -lt 201 ]; do
+#276 for 275 ns NVT Berendsen
+while [ $f -lt 276 ]; do
 
 #nohup mpirun --bind-to none -np 4 \
-#-hostfile $PWD/PBS_NODEFILE 
-$AMBERHOME/bin/pmemd.cuda -O -i mdin.11 \
--o WT_protein_system_wat_md$f.out \
--p WT_protein_system_wat.prmtop \
--c WT_protein_system_wat_md$e.rst \
--r WT_protein_system_wat_md$f.rst \
--x WT_protein_system_wat_md$f.mdcrd \
--ref WT_protein_system_wat_md$e.rst
+#-hostfile $PWD/PBS_NODEFILE
+$AMBERHOME/bin/pmemd.cuda -O \
+-i mdin.11 \
+-p ${prm} \
+-c ${sys}_md$e.rst7 \
+-ref ${sys}_md$e.rst7 \
+-o ${sys}_md$f.out \
+-r ${sys}_md$f.rst7 \
+-x ${sys}_md$f.nc
 
 e=$[$e+1]
 f=$[$f+1]

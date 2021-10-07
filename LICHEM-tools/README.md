@@ -3,6 +3,23 @@
 This directory contains a number of scripts for working with
 [LICHEM](https://github.com/CisnerosResearch/LICHEM).
 
+File conversion and visualization:
+- [`create-reg.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#create-regpy)
+- [`vmd-regions.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#vmd-regionspy)
+
+Modifying Structures:
+- [`mda-qm-part1.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#mda-qm-part1py)
+- [`mda-qm-part2.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#mda-qm-part2py)
+- [`mda-recenter-pdb.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#mda-recenter-pdbpy)
+- [`mda-recenter-txyz.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#mda-recenter-txyzpy)
+- [`swapsies.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#swapsiespy)
+- [`vmd-qm-part1.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#vmd-qm-part1py)
+
+QSM:
+- [`dissected.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#dissectedpy)
+- [`stitching.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#stitchingpy)
+- [`qsm-energy-diagram.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#qsm-energy-diagrampy)
+
 ## `create-reg.py`
 VMD and LICHEM use one numbering system, whereas TINKER uses another.
 This script provides a skeleton for building a `regions.inp` to be used
@@ -18,6 +35,19 @@ The benefit to scripting this process is being able to use the MDAnalysis
 selection language.
 With atom selection commands, you can explicitly list the atoms in your QM
 region using whatever means is most logical to you.
+
+## `dissected.py`
+This script does two things.
+First, it can create a `BurstStruct.xyz` that uses the reactant MM for some
+beads and the product MM for others (aka swapsies), as opposed to the default
+reactant MM for all.
+Second, it can create a `BeadStartStruct.xyz` from a `BurstStruct.xyz` file.
+The output of each of these created files are marked by `new_`.
+
+> Note:
+> The formatting for the `new_BurstStruct.xyz` and the `new_BeadStartStruct.xyz`
+> May not match. I'm working on a portable MDAnalysis writer modification for
+> the output XYZ file, since it does not match LICHEM's and has fewer digits.
 
 ## `qsm-energy-diagram.py`
 This script parses the QSM output file and creates figures of plots for the
