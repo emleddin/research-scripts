@@ -66,6 +66,9 @@ The file names match the script that generated them with the prefix `test-`.
 ## Result of `EDA-diffs.py`
 <img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/EDA/rendered-examples/test-EDA-diffs.png?raw=true" alt="A figure with 5 subplots of energy and average standard deviation" width="500"/>
 
+## Result of `EDA-diffs.py` (with secondary x-axis)
+<img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/EDA/rendered-examples/test-EDA-diffs-w-top.png?raw=true" alt="A figure with 5 subplots of energy and average standard deviation and a secondary x-axis" width="500"/>
+
 ## Result of `EDA-single-diff.py`
 <img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/EDA/rendered-examples/test-EDA-single-diff.png?raw=true" alt="A bar plot with average standard deviation" width="500"/>
 

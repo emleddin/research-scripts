@@ -58,10 +58,19 @@ thresh=1
 ## Plot with error bars? True = yes
 error_bars=True
 
+## Lower
 ## X-axis labels (because you need to match the biologists)
-labelsx2 = [100, 150, 200, 250, 300, 350, 400, '     BR', '', 1000, 1050]
+labelsx1 = [100, 150, 200, 250, 300, 350, 400, '     BR', '', 1000, 1050]
 ## X-axis locations
-placesx2 = [0, 50, 100, 150, 200, 250, 300, 325, 335, 350, 400]
+placesx1 = [0, 50, 100, 150, 200, 250, 300, 325, 335, 350, 400]
+
+## Upper -- if you need to highlight specific thing
+## Set to True if you need them
+upper_axes = True
+## X-axis labels (because you need to match the biologists)
+labelsx2 = ["Me$^{2+}$", "DNA"]
+## X-axis locations
+placesx2 = [50, 400]
 
 #---------- No need to modify past the curtain ---------------#
 neg_thresh=np.negative(thresh)
@@ -152,8 +161,15 @@ ax3.set_ylabel('$\Delta\Delta$E (kcal/mol)')
 plt.xlabel('Residue Number')
 
 ## Put those xticks on the plot
-ax1.set_xticks(placesx2)
-ax1.set_xticklabels(labelsx2, fontdict=None, minor=False)
+ax1.set_xticks(placesx1)
+ax1.set_xticklabels(labelsx1, fontdict=None, minor=False)
+
+## Put those xticks on the plot
+if upper_axes == True:
+    tax = ax1.twiny()
+    tax.set_xticks(placesx2)
+    tax.set_xticklabels(labelsx2, fontdict=None, minor=False)
+    tax.tick_params(pad=0)
 
 # ## Add a ytick
 # extratick=[25]
