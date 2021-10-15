@@ -2,12 +2,22 @@
 This directory contains scripts for preparing the biomolecular structure for MD.
 
 ## `clean-pdb.sh`
-This script is meant to clean up a PDB downloaded from [RCSB](https://www.rcsb.org/)
-to use in MD.
+This script is meant to clean up a PDB downloaded from
+[RCSB](https://www.rcsb.org/) to use in MD.
 By default, it removes `REMARK` and `ANISOU` lines, saves only A-chain residues,
 and renames `HOH` to `WAT`.
 There are also comments for lines that would remove common inhibitors used in
 crystallization.
+
+## `pdb-numbering.py`
+This script is meant to create a key between the biology numbering the the
+LEAP structure numbering.
+
+> ** Note:**
+>
+> You may want to check that the RCSB structure has the expected numbering by
+> using the [Dunbrack Lab's PDBrenum](http://dunbrack.fccc.edu/PDBrenum/)
+> first to match it to the UniProt numbering, and then use that file as input.
 
 ## `propka-integration.py`
 This script take the place of the `grep` command for any AMBER-specific naming

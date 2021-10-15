@@ -5,7 +5,7 @@ thing=RCSB.pdb
 thing_clean=RCSB_clean.pdb
 
 ## Clean the RCSB PDB (Remove crystal junk)
-grep -e '^ATOM\|^HETATM\|^TER\|^END' $thing > $thing_clean
+grep -e '^SEQRES\|^ATOM\|^HETATM\|^TER\|^END' $thing > $thing_clean
 
 ## The remainder will only act on lines containing the specified info
 
