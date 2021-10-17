@@ -9,6 +9,14 @@ Scripts for running on [Cruntch3](http://chemistry.unt.edu/~cruntch/) and
 [Talon3](https://hpc.unt.edu/).
 Cruntch3 uses a PBS (Torque) scheduler, and Talon3 uses a SLURM scheduler.
 
+`get-jobs.py` can be used in place of `qstat` to check jobs.
+It cleans up the output and gives the WallTime.
+Use `-u` or `--user` for the logged-in user.
+No flag will print whole-system information.
+```
+python3 get-jobs.py -u
+```
+
 ## XSEDE
 Scripts for running on [Comet](https://portal.xsede.org/sdsc-comet).
 Comet uses a SLURM scheduler.

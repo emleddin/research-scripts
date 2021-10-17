@@ -36,6 +36,13 @@ $AMBERHOME/bin/pmemd.cuda -O \
 -r ${sys}_md$f.rst7 \
 -x ${sys}_md$f.nc
 
+## Check that rst was made, if not break loop
+if [ -f "${sys}_md${f}.rst7" ]; then
+    :
+else
+    break
+fi
+
 e=$[$e+1]
 f=$[$f+1]
 done

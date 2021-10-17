@@ -6,6 +6,7 @@
 #PBS -o err.error          ## name of error file
 #PBS -N WT_protein         ## name of job for queue
 
+## Copy final _init*.rst7 as _md0.rst7
 sys=WT_protein_system_wat
 prm=${sys}.prmtop
 
@@ -31,6 +32,13 @@ $AMBERHOME/bin/pmemd.cuda.MPI -O -i md.mdin \
 -r ${sys}_md$f.rst \
 -x ${sys}_md$f.nc \
 -ref ${sys}_md$e.rst
+
+## Check that rst was made, if not break loop
+if [ -f "${sys}_md${f}.rst" ]; then
+    :
+else
+    break
+fi
 
 e=$[$e+1]
 f=$[$f+1]

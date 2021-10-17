@@ -6,7 +6,9 @@
 #PBS -o err.error          ## name of error file
 #PBS -N WT_protein         ## name of job for queue
 
-sys=WT_protein
+## Copy inpcrd to file named like WT_protein_system_wat_md0.rst
+sys=WT_protein_system_wat
+prm=${sys}.prmtop
 
 ## The specific GPU you're running on
 export CUDA_VISIBLE_DEVICES=0
@@ -25,11 +27,18 @@ while [ $f -lt 501 ]; do
 ## Make sure that the `md.mdin` is your mdin file!
 $AMBERHOME/bin/pmemd.cuda -O -i md.mdin \
 -o ${sys}_prod$f.out \
--p ${sys}.prmtop \
+-p ${prm} \
 -c ${sys}_prod$e.rst \
 -r ${sys}_prod$f.rst \
 -x ${sys}_prod$f.nc \
 -ref ${sys}_prod$e.rst
+
+## Check that rst was made, if not break loop
+if [ -f "${sys}_prod${f}.rst" ]; then
+    :
+else
+    break
+fi
 
 e=$[$e+1]
 f=$[$f+1]

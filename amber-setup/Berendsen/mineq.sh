@@ -30,6 +30,13 @@ mpirun -np 20 -hostfile $PWD/PBS_NODEFILE $AMBERHOME/bin/pmemd.MPI -O \
 -r ${sys}_init$f.rst7 \
 -x ${sys}_init$f.nc
 
+## Check that rst was made, if not break loop
+if [ -f "${sys}_init${f}.rst7" ]; then
+    :
+else
+    break
+fi
+
 e=$[$e+1]
 f=$[$f+1]
 done
