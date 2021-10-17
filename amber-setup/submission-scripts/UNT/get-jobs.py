@@ -4,18 +4,20 @@ import textwrap
 import argparse
 
 ## Set up argument parsing
-parser = argparse.ArgumentParser(description="Show jobs in queue.")
-parser.add_argument('-u', action="store_true",
-    help="runs at user level (default: all users)")
-parser.add_argument('--user', action="store_true",
-    help="runs at user level (default: all users)")
+parser = argparse.ArgumentParser(
+    description="Show jobs in queue. By default it prints the full queue."+
+    "User-specific information can be requested.")
+parser.add_argument('-u', '--user', type=str,
+    nargs='?', const=subprocess.getoutput("echo $USER"),
+    help="runs at user-level (uses `$USER` if none specified)")
 
 ## Parse any given arguments
 args = parser.parse_args()
 
 ## Set for users (True) or site-wide (False)
-if args.u or args.user:
+if args.user:
     user_level = True
+    user = args.user
 else:
     user_level = False
 
@@ -24,8 +26,9 @@ all_nodes = subprocess.getoutput("pbsnodes -l all")
 
 ## Set up flag for grep commands
 if user_level == True:
-    user = subprocess.getoutput("echo $USER")
-    extra_flag="-u ${USER}"
+    ## Set to given user
+    if user != None:
+        extra_flag=f"-u {user}"
 else:
     extra_flag=""
 
