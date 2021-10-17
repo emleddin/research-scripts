@@ -5,7 +5,7 @@ import argparse
 
 ## Set up argument parsing
 parser = argparse.ArgumentParser(
-    description="Show jobs in queue. By default it prints the full queue."+
+    description="Show jobs in queue. By default it prints the full queue. "+
     "User-specific information can be requested.")
 parser.add_argument('-u', '--user', type=str,
     nargs='?', const=subprocess.getoutput("echo $USER"),
