@@ -5,7 +5,7 @@ import argparse
 
 ## Set up argument parsing
 parser = argparse.ArgumentParser(
-    description="Show jobs in queue. By default it prints the full queue. "+
+    description="Show jobs in queue. By default it prints the full queue."+
     "User-specific information can be requested.")
 parser.add_argument('-u', '--user', type=str,
     nargs='?', const=subprocess.getoutput("echo $USER"),
@@ -59,6 +59,8 @@ res_list_nodes = subprocess.getoutput(f"qstat -f {extra_flag} | grep {grep_res_l
 ## Check for next match (exec_port) to include mutli-line output
 grep_exec_host = "exec_host"
 exec_host = subprocess.getoutput(f"qstat -f {extra_flag} | awk '/exec_host/{{flag=1}} /exec_port/{{flag=0}} flag'")
+
+job_dir = subprocess.getoutput(f"qstat -f {extra_flag} | awk '/Variable_List/{{flag=1}} /etime/{{flag=0}} flag' | grep 'PBS_O_WORKDIR'")
 
 def grep_job_id_clean(cmd_output):
     """
@@ -134,6 +136,19 @@ def grep_exec_clean(cmd_output, grep_locator):
     clean_output = [j.strip() for j in clean_output]
     return clean_output
 
+def grep_job_dir_clean(cmd_output):
+    """
+    Clean up the `job_dir` output.
+    """
+    ## Replace instances of grep locator with nothing
+    clean_output = cmd_output.replace("PBS_O_", '')
+    ## Break into list at newline characters
+    clean_output = clean_output.splitlines()
+    ## Remove whitespace at ends
+    clean_output = [j.strip() for j in clean_output]
+    clean_output = [j.rstrip(',') for j in clean_output]
+    return clean_output
+
 def grep_clean(cmd_output, grep_locator):
     """
     Clean up the general output information. It assumes a section is formatted
@@ -157,6 +172,7 @@ job_state_clean = grep_clean(job_state, grep_job_state)
 wall_time_clean = grep_clean(wall_time, grep_wall_time)
 res_list_nodes_clean = grep_nodes_clean(res_list_nodes, grep_res_list_nodes)
 exec_host_clean = grep_exec_clean(exec_host, grep_exec_host)
+job_dir_clean = grep_job_dir_clean(job_dir)
 
 ## Set Up Header (in center)
 if user_level == True:
@@ -175,20 +191,24 @@ print("==================================================================="+
       "=============")
 
 ## Print job info
-for jidc, joc, qc, jnc, jsc, wc, rlnc, ehc in zip(
+for jidc, joc, qc, jnc, jsc, wc, rlnc, ehc, jdc in zip(
     job_id_clean, job_owner_clean, queue_clean,
     job_name_clean,
     job_state_clean, wall_time_clean, res_list_nodes_clean,
-    exec_host_clean):
+    exec_host_clean, job_dir_clean):
     print("{:<7} {:<8} {:<8} {:<18} {:<5} {:<10} {:<5} {:<11}".format(
     jidc, joc, qc, jnc, jsc, wc, rlnc, ehc[:11]
     ))
 
+    ## If CPU nodes span multiple lines, print them
     if len(ehc) > 11:
         ehc_out = textwrap.TextWrapper(width=78,
            break_long_words=True).wrap(ehc[11:])
         for i in ehc_out:
             print("  {:<78}".format(i))
+
+    ## Print the Job Directory
+    print("  {:<78}".format(jdc))
 
 ## Print explanations
 print("\nStatuses: R=Running, Q=Queued, H=Held, E=Exiting")
