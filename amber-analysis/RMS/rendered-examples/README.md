@@ -132,6 +132,13 @@ the final word reflecting which analysis was plotted in that figure.
 
 <img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/RMS/rendered-examples/test-moving-avgs-rmsf.png?raw=true" alt="A line graph of RMSF for WT, Mutant A, Mutant B, and Mutant C" width="500"/>
 
+## Results of `r-gg-rmsd-rmsf.r`
+<img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/RMS/rendered-examples/test-r-gg-rmsd-rmsf-rmsd.png?raw=true" alt="A scatter plot of RMSD with an averaged line for WT" width="500"/>
+
+<img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/RMS/rendered-examples/test-r-gg-rmsd-rmsf-rmsf.png?raw=true" alt="A scatter plot of RMSF for WT" width="500"/>
+
+<img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/RMS/rendered-examples/test-r-gg-rmsd-rmsf-plots.png?raw=true" alt="Eight graphs, left has RMSD, right has RMSF, with rows of WT, Mutant A, Mutant B, and Mutant C" width="500"/>
+
 ## Results of `rmsd-etc.gnu`
 <img src="https://raw.github.com/emleddin/research-scripts/main/amber-analysis/RMS/rendered-examples/test-rmsd-etc-rmsd.png?raw=true" alt="A line graph of RMSD with WT, Mutant A, Mutant B, and Mutant C" width="500"/>
 

@@ -5,7 +5,7 @@ fluctuation) of protein complexes.
 Total number of hydrogen bonds are also included.
 
 ## `align-traj.py`
-A `python3` script will align a structure to a reference and can be used to
+A `Python3` script will align a structure to a reference and can be used to
 select out certain atoms.
 As written, it will select all water residues within a specific distance
 sphere of a specific residue.
@@ -21,6 +21,10 @@ This script will process that data file (regardless of the number of columns)
 and write out a 2-column data set for `Residue` and `Average`.
 Residues will use the numbering in the PDB.
 
+## `r-gg-rmsd-rmsf.gnu`
+An `R` script for plotting RMSD and RMSF for multiple systems in individual and
+composed figures.
+
 ## `rmsd-etc.gnu`
 A `gnuplot` script for plotting RMSD, RMSF, and average hydrogen bonds present
 on separate graphs.
@@ -34,7 +38,7 @@ replicate trajectories over the same timescale and give standard deviations.
 The output files can be plotted using `avg-rmsd-etc.gnu`.
 
 ## `moving-averages.py`
-A `python3` script for plotting RMSD, RMSF, and average hydrogen bonds present
+A `Python3` script for plotting RMSD, RMSF, and average hydrogen bonds present
 on separate graphs.
 RMSD and average hydrogen bonds present are plotted as moving averages based
 on the previous 1 ns; RMSD is plotted as given.
@@ -43,11 +47,11 @@ using a multiplier (in this case, 1/500).
 It likely will not be `500`, depending on what you used for you mdin files.
 
 ## `natoms-in-range.py`
-A `python3` script for plotting the number of a specific type of ion within
+A `Python3` script for plotting the number of a specific type of ion within
 a range of a residue or protein throughout the course of a simulation.
 This is not intended to determine which ion, specifically, is that location,
 just total the type.
 
 ## Rendered Examples
-This directory has examples of the Python and Gnuplot figures made from the
+This directory has examples of the Python, Gnuplot, and R figures made from the
 above plotting scripts.
