@@ -21,3 +21,9 @@ A PBS script for running `cpptraj-EDA-nas.in`.
 ## `cpptraj-EDA-nas.in`
 Reads in all of the trajectory files and writes out a complete trajectory in
 ASCII format. This can be submitted at the same time as `cpptraj_1.sh`.
+
+## `write-cpptraj.py`
+Creates the `cpptraj_` bash and input files for stripping, analysis, and
+EDA.
+Modify the `write_analy_traj` function to add more analyses.
+This script is particularly helpful for batch creation.

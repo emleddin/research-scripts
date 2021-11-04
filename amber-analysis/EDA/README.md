@@ -31,6 +31,11 @@ a queuing system.
 The actual input file for the program that contains information on the number
 of atoms and frames.
 
+### `write-eda.py`
+This Python script will write the files needed for EDA, which is helpful
+if you're doing many jobs.
+It outputs `EDA_script.sh`, `ans.txt`, and `EDA_new.inp`.
+
 ## Processing the FORTRAN Data
 These scripts are used to process through the `fort.803` and `fort.806` data
 (from replicate runs).
