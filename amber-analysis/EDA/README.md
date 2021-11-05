@@ -6,11 +6,11 @@ An OpenMP version of this program can be found on the
 
 ## Running the FORTRAN Program
 The program will have 3 output files: `fort.803`, `fort.804`, and `fort.806`.
-`fort.803` contains the Coulomb energies, `fort.804` contains a sanity check,
+`fort.803` contains the Coulomb energies, `fort.804` contains a logic check,
 and `fort.806` contains the van der Waals energies.
 If you're using the OpenMP version, the naming will be
 `fort_coulomb_interaction.dat` for the Coulomb energies,
-`fort_sanity_check.txt` for the sanity check, and
+`fort_logic_check.txt` for the logic check, and
 `fort_vdw_interaction.dat` for the van der Waals energies.
 
 A critical note for the FORTRAN program is that it will not work on NetCDF files,
