@@ -9,26 +9,30 @@ packages <- c("data.table", "ggplot2", "dplyr", "tidyr", "ggpubr")
 install.packages(setdiff(packages, rownames(installed.packages())))
 invisible(lapply(packages, library, character.only = TRUE))
 
-## Path to the total_bb_rm.dat file
+## Path to the total_bb_rm.dat and rmsf_byes.dat files
 ## You're not *required* to use the absolute path (and too long a path will
 ## cause issues...)
 infile_rmsd_wt <- Sys.glob("/absolute/path/to/wt/WT_total_bb_rms.dat")
-infile_rmsf_wt <- Sys.glob("/absolute/path/to/wt/WT_total_bb_rms.dat")
+infile_rmsf_wt <- Sys.glob("/absolute/path/to/wt/WT_rmsf_byres.dat")
 
 infile_rmsd_snp1 <- Sys.glob("/absolute/path/to/snp1/SNP1_total_bb_rms.dat")
-infile_rmsf_snp1 <- Sys.glob("/absolute/path/to/snp1/SNP1_total_bb_rms.dat")
+infile_rmsf_snp1 <- Sys.glob("/absolute/path/to/snp1/SNP1_rmsf_byres")
 
-infile_rmsd_snp2 <- Sys.glob("/absolute/path/to/snp2/SNP1_total_bb_rms.dat")
-infile_rmsf_snp2 <- Sys.glob("/absolute/path/to/snp2/SNP1_total_bb_rms.dat")
+infile_rmsd_snp2 <- Sys.glob("/absolute/path/to/snp2/SNP2_total_bb_rms.dat")
+infile_rmsf_snp2 <- Sys.glob("/absolute/path/to/snp2/SNP2_rmsf_byres")
 
-infile_rmsd_snp3 <- Sys.glob("/absolute/path/to/snp3/SNP1_total_bb_rms.dat")
-infile_rmsf_snp3 <- Sys.glob("/absolute/path/to/snp3/SNP1_total_bb_rms.dat")
+infile_rmsd_snp3 <- Sys.glob("/absolute/path/to/snp3/SNP3_total_bb_rms.dat")
+infile_rmsf_snp3 <- Sys.glob("/absolute/path/to/snp3/SNP3_rmsf_byres")
 
 ## Variables
 font_size = 12
-## Background transparency in individual RMSD/RMSF plots you may make?
+## Do you want to make individual plots for the RMSD and RMSF of each system?
+## TRUE will make individual RMSD and RMSF plots + a composite,
+## FALSE will only make the composite
+individual_plots=TRUE
+## Do you want background transparency in individual RMSD/RMSF plots?
 transparency=TRUE
-## Frames/div_frame_by becomes nanoseconds (typically 500 or 1000)
+## Frames/div_frame_by becomes nanoseconds (typically 250, 500, or 1000)
 div_frame_by = 500
 
 ## Colors for the data!
@@ -38,7 +42,7 @@ div_frame_by = 500
 # snp2_color = "#8931EF" # purple
 # snp3_color = "#3C8033" # green
 
-## Define the systems
+## Define the systems -- do a find and replace for these (with the quotes)!
 System = c("WT", "SNP1", "SNP2", "SNP3")
 ## Define the colors to use (same order as systems)
 Color  = c("#A2117B", "#0000FF", "#8931EF", "#3C8033")
@@ -63,6 +67,25 @@ plot_y_ax_rmsf = c(0, 7)
 ## Set up RMSF residue axis label Positions, Labels)
 rmsf_pos = c(1, 51, 101, 151, 201, 251, 295)
 rmsf_labs = c("16", "66", "GS", "166", "216", "266", "DNA")
+
+## Name your output files
+## Name said individual plots (if you want them, otherwise you can comment out)
+out_rmsd_wt <- "WT_rmsd.png"
+out_rmsf_wt <- "WT_rmsf.png"
+
+out_rmsd_snp1 <- "SNP1_rmsd.png"
+out_rmsf_snp1 <- "SNP1_rmsf.png"
+
+out_rmsd_snp2 <- "SNP2_rmsd.png"
+out_rmsf_snp2 <- "SNP2_rmsf.png"
+
+out_rmsd_snp3 <- "SNP3_rmsd.png"
+out_rmsf_snp3 <- "SNP3_rmsf.png"
+
+## Name the composite figure
+out_plots_composite <- "WT_SNPs_rmsd_rmsf_comp.png"
+
+## Note! Sometimes ggplot2 also makes an empty `Rplots.pdf`. Nothing is wrong!!!
 
 ##--------------------------##
 ##---- Set up Functions ----##
@@ -218,13 +241,15 @@ p_rmsd_wt <- plot_rmsd(read_rmsd_wt, x_ax=plot_x_ax_rmsd, y_ax=plot_y_ax_rmsd,
 p_rmsf_wt <- plot_rmsf(read_rmsf_wt, pt=prop_df["WT", "Shape"],
   colors=prop_df["WT", "Color"])
 
-## Save an individual RMSD plot for WT
-ggsave("rmsd.png", plot=p_rmsd_wt, width=5, height=3, units="in",
-    bg = back_col, dpi=300)
-
-## Save an individual RMSF plot for WT
-ggsave("rmsf.png", plot=p_rmsf_wt, width=5, height=3, units="in",
-    bg = back_col, dpi=300)
+## Print individual plots if requested
+if (individual_plots) {
+    ## Save an individual RMSD plot for WT
+    ggsave(out_rmsd_wt, plot=p_rmsd_wt, width=5, height=3, units="in",
+        bg = back_col, dpi=300)
+    ## Save an individual RMSF plot for WT
+    ggsave(out_rmsf_wt, plot=p_rmsf_wt, width=5, height=3, units="in",
+        bg = back_col, dpi=300)
+}
 
 ## ---------------- SNP1
 read_rmsd_snp1 <- read_file(infile_rmsd_snp1, head_row=TRUE,
@@ -241,6 +266,16 @@ p_rmsd_snp1 <- plot_rmsd(read_rmsd_snp1,
 p_rmsf_snp1 <- plot_rmsf(read_rmsf_snp1,
   pt=prop_df["SNP1", "Shape"], colors=prop_df["SNP1", "Color"])
 
+## Print individual plots if requested
+if (individual_plots) {
+## Save an individual RMSD plot for WT
+ggsave(out_rmsd_snp1, plot=p_rmsd_wt, width=5, height=3, units="in",
+    bg = back_col, dpi=300)
+## Save an individual RMSF plot for WT
+ggsave(out_rmsf_snp1, plot=p_rmsf_wt, width=5, height=3, units="in",
+    bg = back_col, dpi=300)
+}
+
 ## ---------------- SNP2
 read_rmsd_snp2 <- read_file(infile_rmsd_snp2, head_row=TRUE,
   c1="Frame", c2="RMSD", sys_lab="SNP2")
@@ -256,6 +291,16 @@ p_rmsd_snp2 <- plot_rmsd(read_rmsd_snp2,
 p_rmsf_snp2 <- plot_rmsf(read_rmsf_snp2,
   pt=prop_df["SNP1", "Shape"], colors=prop_df["SNP2", "Color"])
 
+## Print individual plots if requested
+if (individual_plots) {
+  ## Save an individual RMSD plot for WT
+  ggsave(out_rmsd_snp2, plot=p_rmsd_wt, width=5, height=3, units="in",
+      bg = back_col, dpi=300)
+  ## Save an individual RMSF plot for WT
+  ggsave(out_rmsf_snp2, plot=p_rmsf_wt, width=5, height=3, units="in",
+      bg = back_col, dpi=300)
+}
+
 ## ---------------- SNP3
 read_rmsd_snp3 <- read_file(infile_rmsd_snp3, head_row=TRUE,
   c1="Frame", c2="RMSD", sys_lab="SNP3")
@@ -270,6 +315,16 @@ p_rmsd_snp3 <- plot_rmsd(read_rmsd_snp3,
 ## Plot RMSF
 p_rmsf_snp3 <- plot_rmsf(read_rmsf_snp3,
   pt=prop_df["SNP3", "Shape"], colors=prop_df["SNP3", "Color"])
+
+## Print individual plots if requested
+if (individual_plots) {
+## Save an individual RMSD plot for WT
+ggsave(out_rmsd_snp3, plot=p_rmsd_wt, width=5, height=3, units="in",
+    bg = back_col, dpi=300)
+## Save an individual RMSF plot for WT
+ggsave(out_rmsf_snp3, plot=p_rmsf_wt, width=5, height=3, units="in",
+    bg = back_col, dpi=300)
+}
 
 ## ---------------- Legend
 ## Add a fake legend that grabs the shape/color combos
@@ -294,5 +349,5 @@ figure <- ggarrange(p_rmsd_wt, p_rmsf_wt, p_rmsd_snp1, p_rmsf_snp1,
       legend.grob=get_legend(my_leg))
 
 ## Save the massive figure!
-ggsave("plots.png", plot=figure, width=8.5, height=11, units="in",
+ggsave(out_plots_composite, plot=figure, width=8.5, height=11, units="in",
     bg = "white", dpi=300)
