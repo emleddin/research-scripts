@@ -1,0 +1,47 @@
+trajin ../../5Y2S_wat_imaged_1-50.nc
+
+autoimage
+
+## Center the non-solvent residues -- VERY IMPORTANT FOR TINKER
+center :1-261 origin mass
+
+## Write out the frames of a single cluster, as identified through the
+## `grep` command
+trajout 5Y2S_wat_subclust_num_0.nc netcdf onlyframes \
+ 232,524,1041,1259,1788,1841,1847,1856,1869,1873,2280,2293,2600,2663,2710,\
+ 2716,2717,2877,2977,2999,3130,3343,3360,3374,3606,3616,3618,3629,5036,5044,\
+ 5240,5244,5415,5427,5473,5998,6168,6334,6704,6750,7056,7863,7899,8685,8756,\
+ 8810,9344,9802,9911,9916,9941,9980,10747,10756,10804,10806,10818
+
+autoimage
+
+## Use this next block to create that file and clear any currently loaded
+## files
+#####################
+go
+
+clear trajin
+
+go
+####################
+
+## Read in the file with specific frames from the cluster from the file you
+## just wrote
+trajin 5Y2S_wat_subclust_num_0.nc
+
+## O-C Distance
+distance d1 :259@O :261@C
+
+## O-C-O Angle
+## 2 kinds of OCO are possible!
+angle a1 :259@O :261@C :261@O1
+angle a2 :259@O :261@C :261@O2
+
+## ## 10 clusters of k-means based on OC distance and OCO angles
+cluster coco kmeans clusters 10 data d1,a1,a2 \
+info 5Y2S_OC_OCO_sub_km_clust_detail_info.dat \
+out 5Y2S_OC_OCO_sub_km_clustnum_v_time.dat \
+summary 5Y2S_OC_OCO_sub_km_clust_summary.dat \
+avgout 5Y2S_OC_OCO_sub_km_clust avgfmt pdb \
+cpopvtime 5Y2S_OC_OCO_sub_popvtime.dat
+

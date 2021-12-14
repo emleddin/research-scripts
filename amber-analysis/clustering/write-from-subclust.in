@@ -1,0 +1,56 @@
+## Read in all the files used for to create the stripped trajectories in the
+## exact same order to ensure that the proper frames are pulled
+trajin /absolute/path/to/the/file/for/replicate1/5Y2S_wat_md1.mdcrd
+trajin /absolute/path/to/the/file/for/replicate1/5Y2S_wat_md2.mdcrd
+
+trajin /absolute/path/to/the/file/for/replicate2/5Y2S_wat_md1.mdcrd
+trajin /absolute/path/to/the/file/for/replicate2/5Y2S_wat_md2.mdcrd
+
+trajin /absolute/path/to/the/file/for/replicate3/5Y2S_wat_md1.mdcrd
+trajin /absolute/path/to/the/file/for/replicate3/5Y2S_wat_md2.mdcrd
+## ... continue
+
+autoimage
+
+## Center the non-solvent residues -- VERY IMPORTANT FOR TINKER
+center :1-261 origin mass
+
+## Write out the frames of a single cluster, as identified through the
+## `grep` command
+trajout 5Y2S_wat_subclust_num_0_unstripped.nc netcdf onlyframes \
+ 232,524,1041,1259,1788,1841,1847,1856,1869,1873,2280,2293,2600,2663,2710,\
+ 2716,2717,2877,2977,2999,3130,3343,3360,3374,3606,3616,3618,3629,5036,5044,\
+ 5240,5244,5415,5427,5473,5998,6168,6334,6704,6750,7056,7863,7899,8685,8756,\
+ 8810,9344,9802,9911,9916,9941,9980,10747,10756,10804,10806,10818
+
+## Use this next block to create that file and clear any currently loaded
+## files
+#####################
+go
+
+clear trajin
+
+go
+####################
+
+## Read in the file with specific frames from the cluster from the file you
+## just wrote
+trajin 5Y2S_wat_subclust_num_0_unstripped.nc
+
+autoimage
+
+## Center the non-solvent residues -- VERY IMPORTANT FOR TINKER
+center :1-261 origin mass
+
+## Write out the specific PDBs identified with clustering
+trajout 5Y2S_subclust_c0_frame_6.pdb pdb onlyframes 6
+trajout 5Y2S_subclust_c1_frame_29.pdb pdb onlyframes 29
+trajout 5Y2S_subclust_c2_frame_34.pdb pdb onlyframes 34
+trajout 5Y2S_subclust_c3_frame_56.pdb pdb onlyframes 56
+trajout 5Y2S_subclust_c4_frame_10.pdb pdb onlyframes 10
+trajout 5Y2S_subclust_c5_frame_45.pdb pdb onlyframes 45
+trajout 5Y2S_subclust_c6_frame_4.pdb pdb onlyframes 4
+trajout 5Y2S_subclust_c7_frame_5.pdb pdb onlyframes 5
+trajout 5Y2S_subclust_c8_frame_47.pdb pdb onlyframes 47
+trajout 5Y2S_subclust_c9_frame_5.pdb pdb onlyframes 5
+

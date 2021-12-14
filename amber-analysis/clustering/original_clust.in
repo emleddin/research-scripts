@@ -1,0 +1,26 @@
+trajin ../5Y2S_wat_imaged_1-50.nc
+#trajin ../path/to/other/stripped/trajectories.nc
+
+autoimage
+
+## O-C Distance
+distance d1 :259@O :261@C out 5Y2S_OC_dist.dat
+
+## O-C-O Angle
+## 2 kinds of OCO are possible!
+angle a1 :259@O :261@C :261@O1 out 5Y2S_OCO1_ang.dat
+angle a2 :259@O :261@C :261@O2 out 5Y2S_OCO2_ang.dat
+
+## kdist test
+cluster C0 dbscan kdist 9 data d1,a1,a2 sieve 10
+
+## DBSCAN based on PA-O distance and OPO angle
+cluster c1 dbscan minpoints 25 epsilon 2.2 data d1,a1,a2 \
+ pairdist 5Y2S_OC_OCO_db_clust_pairs.dat \
+ loadpairdist \
+ info 5Y2S_OC_OCO_db_clust_detail_info.dat \
+ out 5Y2S_OC_OCO_db_clustnum_v_time.dat \
+ summary 5Y2S_OC_OCO_db_clust_summary.dat \
+ avgout 5Y2S_OC_OCO_db_clust avgfmt pdb \
+ cpopvtime 5Y2S_OC_OCO_db_popvtime.dat
+
