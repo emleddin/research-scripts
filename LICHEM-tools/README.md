@@ -3,6 +3,10 @@
 This directory contains a number of scripts for working with
 [LICHEM](https://github.com/CisnerosResearch/LICHEM).
 
+General Tools:
+- [`get-energies.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#get-energiespy)
+- [`qm-pdb-map.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#qm-pdb-mappy)
+
 File conversion and visualization:
 - [`create-reg.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#create-regpy)
 - [`vmd-regions.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#vmd-regionspy)
@@ -48,6 +52,11 @@ The output of each of these created files are marked by `new_`.
 > The formatting for the `new_BurstStruct.xyz` and the `new_BeadStartStruct.xyz`
 > May not match. I'm working on a portable MDAnalysis writer modification for
 > the output XYZ file, since it does not match LICHEM's and has fewer digits.
+
+## `get-energies.py`
+This script will parse the `LICHM_GaussEnergy` and `LICHM_TINKEREnergy` file
+to separate out the QM and MM energy given in the LICHEM log.
+These energies can be converted to different units, such as eV and kcal/mol.
 
 ## `qsm-energy-diagram.py`
 This script parses the QSM output file and creates figures of plots for the
@@ -134,6 +143,12 @@ atoms in the original XYZ with the modified QM atom positions.
   the XYZ molecule_name line. LICHEM cannot handle any information in this line.
   (There is currently a pull request which will fix this on the MDAnalysis end,
   using remarks, and this script will work properly once it is incorporated.)
+
+### `qm-pdb-map.py`
+If you ever need to Frankenstein a QM region together, it will help to know
+what atom is which.
+Using this script will make a `PDB_verification.txt` file that will contain
+the PDB file's index for QM structures obtained through `mda-qm-part1.py`.
 
 ### `vmd-qm-part1.py`
 An alternative to running `mda-qm-part1.py`, this creates a VMD command file
