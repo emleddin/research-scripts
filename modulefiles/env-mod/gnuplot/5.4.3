@@ -1,0 +1,22 @@
+#%Module
+#
+# Gnuplot 5.4.3
+# Date: 11 Feb 2022
+#
+set                 name                   "gnuplot"
+set                 version                5.4.3
+set                 desc                   "command-line graphing utility"
+set                 url                    "http://www.gnuplot.info/"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set                 GNU_ROOT               /path/to/gnuplot-5.4.3
+
+# module load gcc/9.3.0
+
+proc ModulesHelp { } {
+      global helpmsg
+      puts stderr "\t$helpmsg\n"
+}
+
+
+prepend-path        PATH                   ${GNU_ROOT}/bin
+

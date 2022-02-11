@@ -1,0 +1,28 @@
+#%Module1.0
+#
+# VMD 1.9.3
+# Date: 14 Jan 2022
+#
+set             name       "Visual Molecular Dynamics"
+set             version    "1.9.3"
+set             desc       "molecular modelling and visualization computer program"
+set             url        "https://www.ks.uiuc.edu/Research/vmd/"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set             VMD_ROOT   /path/to/vmd-1.9.3/
+
+proc ModulesHelp { } {
+        global name
+        global desc
+        global url
+        puts stderr "This module provides $desc\n"
+        puts stderr "More information about $name can be found at:"
+        puts stderr "    $url\n"
+}
+
+module-whatis   "$desc"
+
+prepend-path    PATH       ${VMD_ROOT}/bin
+
+# Compiler
+#module load compilers/gcc/9.3.0
+

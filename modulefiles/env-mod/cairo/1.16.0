@@ -1,0 +1,37 @@
+#%Module1.0
+#
+# Libcairo modulefile
+#
+# set versioning tokens
+set     name            "Cairo"
+set     version         "1.16.0"
+set     arch            "x86_64"
+set     comp            "gcc/5.5.0"
+set     desc            "$name ($version, $arch, $comp)"
+set     url             "https://www.cairographics.org/"
+set     addn_info       "This uses Freetype 2.10.4 and libpng 1.6.37"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set     LIBPNG_ROOT     "/path/to/top-level/libpng"
+set     FREETYPE_ROOT   "/path/to/top-level/freetype"
+set     CAIRO_ROOT      "/path/to/top-level/cairo"
+
+proc ModulesHelp { } {
+        global name
+        global desc
+        global url
+        global addn_info
+        puts stderr "This module provides $desc\n"
+        puts stderr "More information about $name can be found at:"
+        puts stderr "    $url\n"
+        puts stderr "$addn_info\n"
+}
+
+module-whatis   "Sets the environment for $desc"
+
+# set up environment
+prepend-path    PATH              "${CAIRO_ROOT}"
+prepend-path    PATH              "${LIBPNG_ROOT}"
+prepend-path    PATH              "${FREETYPE_ROOT}"
+prepend-path    LD_LIBRARY_PATH   "${CAIRO_ROOT}/lib"
+prepend-path    PKG_CONFIG_PATH   "${CAIRO_ROOT}/lib/pkgconfig"
+#setenv

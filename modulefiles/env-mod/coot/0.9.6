@@ -1,0 +1,25 @@
+#%Module1.0
+#
+# Coot 0.9.6
+# Date: 11 Feb 2022
+#
+set             name        "Coot: Crystallographic Object-Oriented Toolkit"
+set             version     "0.9.6"
+set             desc        "macromolecular model building, model completion and validation"
+set             url         "https://www2.mrc-lmb.cam.ac.uk/personal/pemsley/coot/"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set             COOT_ROOT   /path/to/coot-0.9.6
+
+proc ModulesHelp { } {
+        global name
+        global desc
+        global url
+        puts stderr "This module provides $desc\n"
+        puts stderr "More information about $name can be found at:"
+        puts stderr "    $url\n"
+}
+
+module-whatis   "$desc"
+
+prepend-path    PATH        ${COOT_ROOT}/bin
+

@@ -1,0 +1,25 @@
+#%Module1.0
+#
+# Blender 3.0.0
+# Date: 11 Feb 2022
+#
+set             name         "Blender"
+set             version      "3.0.0"
+set             desc         "3D computer graphics toolset for animation, videography, and modelling"
+set             url          "https://www.blender.org/"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set             BLEND_ROOT   /path/to/blender-3.0.0
+
+proc ModulesHelp { } {
+        global name
+        global desc
+        global url
+        puts stderr "This module provides $desc\n"
+        puts stderr "More information about $name can be found at:"
+        puts stderr "    $url\n"
+}
+
+module-whatis   "$desc"
+
+prepend-path    PATH       ${BLEND_ROOT}
+

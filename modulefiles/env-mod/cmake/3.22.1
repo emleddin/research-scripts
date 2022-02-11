@@ -1,0 +1,33 @@
+#%Module1.0
+#
+# cmake compilers and headers modulefile
+# Date: 11 Feb 2022
+#
+set             name                    "cmake Toolkit"
+set             version                 "3.22.1"
+set             arch                    "x86_64"
+set             desc                    "cmake compilers and headers"
+set             url                     "http://www.cmake.org/"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set             CMAKE_ROOT              /path/to/cmake-3.22.1
+
+proc ModulesHelp { } {
+        global name
+        global desc
+        global url
+        puts stderr "This module provides $desc\n"
+        puts stderr "More information about $name can be found at:"
+        puts stderr "    $url\n"
+}
+
+module-whatis   "Sets the environment for $desc"
+
+conflict        cmake
+
+#module load compilers/gcc/9.3.0
+
+prepend-path    PATH                    ${CMAKE_ROOT}
+prepend-path    PATH                    ${CMAKE_ROOT}/bin
+prepend-path    PATH                    /usr/lib64
+setenv          CMAKE_ROOT              ${CMAKE_ROOT}
+

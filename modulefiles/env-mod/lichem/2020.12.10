@@ -1,0 +1,37 @@
+#%Module1.0
+#
+# LICHEM modulefile
+#
+# set versioning tokens
+set     name            "LICHEM"
+set     version         "12-10-2020 Commit f6b429a"
+set     arch            "x86_64"
+set     comp            "gcc/5.5.0"
+set     mpi             "mvapich2/gnu/ib/2.2"
+set     desc            "$name ($version, $arch, $comp, $mpi)"
+set     url             "https://github.com/CisnerosResearch/LICHEM"
+set     LIB_ROOT        "/usr/lib64"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set     LICHEM_ROOT     "/path/to/top-level/lichem"
+
+proc ModulesHelp { } {
+        global name
+        global desc
+        global url
+        puts stderr "This module provides $desc\n"
+        puts stderr "More information about $name can be found at:"
+        puts stderr "    $url\n"
+}
+
+module-whatis   "Sets the environment for $desc"
+
+## Other modules needed
+module load gcc/5.5.0
+module load mvapich2/gnu/ib/2.2
+module load gaussian/g16-RevA.03
+module load tinker/7.1
+
+# set up environmet
+prepend-path    PATH              "${LICHEM_ROOT}/bin"
+prepend-path    PATH              "${LIB_ROOT}"
+setenv          GAUSS_SCRDIR      "/tmp"

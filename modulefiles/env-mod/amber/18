@@ -1,0 +1,32 @@
+#%Module1.0
+#
+# Amber 18 + AmberTools18
+# Date: 11 Feb 2022
+#
+set             name                 "Amber"
+set             version              "18"
+set             url                  "http://ambermd.org"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set             AMBER_ROOT           /usr/local/bin/amber/amber18
+
+# Add ModulesHelp
+proc ModulesHelp { } {
+        global name
+        global url
+        puts stderr "More information about $name can be found at:"
+        puts stderr "    $url\n"
+}
+
+# Add whatis
+module-whatis   "Sets the environment for $name."
+
+setenv          AMBER_PREFIX         ${AMBER_ROOT}
+setenv          AMBERHOME            ${AMBER_ROOT}
+prepend-path    PATH                 ${AMBER_ROOT}/bin
+prepend-path    LD_LIBRARY_PATH      ${AMBER_ROOT}/miniconda/lib
+prepend-path    LD_LIBRARY_PATH      ${AMBER_ROOT}/lib
+prepend-path    PYTHONPATH           ${AMBER_ROOT}/lib/python2.7/site-packages
+
+# Compiler
+#module load compilers/gcc/9.3.0
+

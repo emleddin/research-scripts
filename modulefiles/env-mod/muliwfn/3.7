@@ -1,0 +1,30 @@
+#%Module1.0
+#
+# Multiwfn 3.7
+# Date: 11 Feb 2022
+#
+set             name           "Multiwfn"
+set             version        "3.7"
+set             desc           "electronic wavefunction analysis program"
+set             url            "http://sobereva.com/multiwfn"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set             M_WFN_ROOT     /path/to/multiwfn-3.7
+
+proc ModulesHelp { } {
+        global name
+        global desc
+        global url
+        puts stderr "This module provides $desc\n"
+        puts stderr "More information about $name can be found at:"
+        puts stderr "    $url\n"
+}
+
+module-whatis   "$desc"
+
+setenv          KMP_STACKSIZE  200M
+prepend-path    PATH           ${M_WFN_ROOT}
+set-alias       multiwfn       ${M_WFN_ROOT}/Multiwfn
+
+# Compiler
+#module load icc/2022.0.1
+

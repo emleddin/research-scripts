@@ -1,0 +1,25 @@
+#%Module1.0
+#
+# Chimera 1.16
+# Date: 11 Feb 2022
+#
+set             name        "UCSF Chimera"
+set             version     "1.16"
+set             desc        "visualization and analysis of molecular structures"
+set             url         "https://www.cgl.ucsf.edu/chimera/"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set             CHIM_ROOT   /usr/local/bin/chimera/1.16
+
+proc ModulesHelp { } {
+        global name
+        global desc
+        global url
+        puts stderr "This module provides $desc\n"
+        puts stderr "More information about $name can be found at:"
+        puts stderr "    $url\n"
+}
+
+module-whatis   "$desc"
+
+prepend-path    PATH        ${CHIM_ROOT}/bin
+

@@ -1,0 +1,39 @@
+#%Module1.0
+#
+# GROMACS modulefile
+#
+set     name           "GROMACS"
+set     version        "4.5.5"
+set     arch           "x86_64"
+set     comp           "gcc/5.5.0"
+set     desc           "$name ($version, $arch, $comp)"
+set     url            "http://www.gromacs.org/"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set     GMXPREFIX      "/path/to/top-level/gromacs455"
+
+proc ModulesHelp { } {
+        global name
+        global desc
+        global url
+        puts stderr "This module provides $desc\n"
+        puts stderr "More information about $name can be found at:"
+        puts stderr "    $url\n"
+}
+
+module-whatis   "Sets the environment for $desc"
+
+# Load other necessary modules
+module load gcc/5.5.0
+module load mvapich2/gnu/ib/2.2
+
+set             GROMACS_DIR     ${GMXPREFIX}
+setenv          GMXBIN          ${GROMACS_DIR}/bin
+prepend-path    PATH            ${GROMACS_DIR}/bin
+setenv          GMXLDLIB        ${GROMACS_DIR}/lib
+prepend-path    LD_LIBRARY_PATH ${GROMACS_DIR}/lib64
+prepend-path    PKG_CONFIG_PATH ${GROMACS_DIR}/lib64/pkgconfig
+setenv          GMXMAN          ${GROMACS_DIR}/share/man
+prepend-path    MANPATH         ${GROMACS_DIR}/share/man
+setenv          GMXDATA         ${GROMACS_DIR}/share/gromacs
+setenv          GMX_FONT        10x20
+

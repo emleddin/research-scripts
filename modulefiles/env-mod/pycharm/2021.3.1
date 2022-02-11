@@ -1,0 +1,26 @@
+#%Module1.0
+#
+# PyCharm 2021.3.1
+# Date: 11 Feb 2022
+#
+set             name        "PyCharm Community"
+set             version     "2021.3.1"
+set             desc        "Python IDE"
+set             url         "https://www.jetbrains.com/pycharm/"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set             PYCH_ROOT   /path/to/pycharm-2021.3.1
+
+proc ModulesHelp { } {
+        global name
+        global desc
+        global url
+        puts stderr "This module provides $desc\n"
+        puts stderr "More information about $name can be found at:"
+        puts stderr "    $url\n"
+}
+
+module-whatis   "$desc"
+
+prepend-path    PATH        ${PYCH_ROOT}/bin
+set-alias       pycharm     "bash ${PYCH_ROOT}/bin/pycharm.sh"
+

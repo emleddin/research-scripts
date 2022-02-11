@@ -1,0 +1,37 @@
+#%Module1.0
+#
+# TINKER OpenMM modulefile
+#
+# set versioning tokens
+set     name           "Tinker"
+set     version        "8.7.1"
+set     arch           "x86_64"
+set     comp           "gcc-5.5.0/cuda-8.0"
+set     desc           "$name ($version, $arch)"
+set     url            "https://dasher.wustl.edu/tinker/"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set     TINKER_ROOT    "/path/to/top-level/tinker-openmm/"
+
+proc ModulesHelp { } {
+        global name
+        global desc
+        global url
+        puts stderr "This module provides $desc\n"
+        puts stderr "More information about $name can be found at:"
+        puts stderr "    $url\n"
+}
+
+module-whatis   "$desc"
+
+## Other modules needed
+module load cuda/8.0.44
+module load gcc/5.5.0
+
+# Set up environment
+# FIXME: Your cuda version and resulting nvcc path may be different!!!
+setenv        OPENMM_CUDA_COMPILER "/usr/local/cuda-8.0/bin/nvcc"
+
+prepend-path  LD_LIBRARY_PATH      "${TINKER_ROOT}/openmm/lib"
+prepend-path  PATH                 "${TINKER_ROOT}/bin"
+setenv        OPENMM_PLUGIN_DIR    "${TINKER_ROOT}/openmm/lib/plugins"
+prepend-path  PATH                 "${TINKER_ROOT}/tinker/source"

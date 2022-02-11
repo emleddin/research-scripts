@@ -1,0 +1,28 @@
+#%Module
+#
+# R 4.1.2
+# Date: 11 Feb 2022
+#
+set                 name                   "R"
+set                 version                4.1.2
+set                 desc                   "programming language for statistical computing and graphics"
+set                 url                    "https://www.r-project.org/"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set                 R_ROOT                 /path/to/R-4.1.2
+
+#module load gcc/9.3.0
+
+proc ModulesHelp { } {
+      global helpmsg
+      puts stderr "\t$helpmsg\n"
+}
+
+
+prepend-path        PATH                   ${R_ROOT}/bin
+prepend-path        LD_LIBRARY_PATH        ${R_ROOT}/lib64/R/lib/
+setenv              R_ENVIRON              ${R_ROOT}/library
+
+#setenv              TK_LIBRARY             /usr/local/packages/apps/tk/8.6.10/gcc-8.2.0/lib/tk8.6
+#setenv              TCL_LIBRARY            /usr/local/packages/apps/tcl/8.6.10/gcc-8.2.0/lib/tcl8.6
+
+

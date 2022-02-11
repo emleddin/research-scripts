@@ -1,0 +1,31 @@
+#%Module1.0
+#
+# anaconda3 module
+# Date: 11 Feb 2022
+#
+set     name         "Anaconda3 Python"
+set     version      "2021.11"
+set     arch         "x86_64"
+set     desc         "an interpreted, interactive, object-oriented programming language"
+set     url          "https://www.anaconda.com/products/individual"
+# FIXME: Change the filepaths! Do not use environment variables to do so!
+set     PYROOT       /path/to/anaconda3
+
+proc ModulesHelp { } {
+        global name
+        global desc
+        global url
+        puts stderr "This module provides $desc\n"
+        puts stderr "More information about $name can be found at:"
+        puts stderr "    $url\n"
+}
+
+module-whatis   "$desc"
+
+conflict        python
+
+prepend-path    PATH            $PYROOT/bin
+
+# Compiler
+#module load compilers/gcc/9.3.0
+
