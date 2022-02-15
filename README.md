@@ -23,6 +23,9 @@ simulations.
 This directory contains a collection of scripts for preparing systems and
 running simulations with AMBER MD.
 
+## general-plotting
+This directory contains non-specific plotting scripts.
+
 ## gromacs-analysis
 This directory contains different scripts relevant to analyzing GROMACS MD
 simulations.
