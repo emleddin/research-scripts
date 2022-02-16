@@ -8,6 +8,21 @@ This should be saved as `~/.gnuplot`.
 My configuration file for `VMD` with things such as using black for labels.
 This should be saved as `~/.vmdrc`.
 
+## `labeled-gif.sh`
+A bash script for taking individual saved PNG files, labeling them with the
+frame number in the top-right corner, and saving as a continuously looping gif.
+An example usage of this would be QM/MM reactions where you need to modify 
+visible bonds on a per-frame basis.
+The script requires [ImageMagick](https://imagemagick.org/script/download.php).
+Each file is assumed to be named similarly, for example:
+```
+$ ls
+ my_vmd_image0.png   my_vmd_image1.png    my_vmd_image2.png    my_vmd_image3.png
+ my_vmd_image4.png   my_vmd_image5.png    my_vmd_image6.png    my_vmd_image7.png
+ my_vmd_image8.png   my_vmd_image9.png   my_vmd_image10.png   my_vmd_image11.png
+my_vmd_image12.png
+```
+
 ## `midasrc`
 A configuration file for `UCSF Chimera` (which, in my experience, is applied
 after opening Chimera's command line). This should be stored as
