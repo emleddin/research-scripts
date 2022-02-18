@@ -21,3 +21,4 @@ plt.ylabel('Percentage of\nTotal Motion (%)')
 plt.plot(data1eigenrank,data1eigenvalue,marker='o',c='black',linewidth=2.0)
 plt.savefig('WT_protein_system_eigenplot.png')
 plt.gcf().clear()
+

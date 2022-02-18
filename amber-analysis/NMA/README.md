@@ -9,9 +9,15 @@ specific system.
 
 ## `eigenplots.py`
 A python script to plot the contributions of the different normal modes and
-determine which are important for the overall motion of the protein.
+determine which are important for the overall motion of the protein when using
+an NMD file generated through VMD.
 This information can then be used to determine the number of modes to plot
 using `NMA_plot_mult.py`.
+
+## `eigenplots-cpptraj.py`
+A python script to plot the contributions of the different normal modes and
+determine which are important for the overall motion of the protein when using
+an NMD file generated through `cpptraj`.
 
 ## `NMA_plot_mult.py`
 A python script to plot the most relevant normal modes from the `.nmd` file
