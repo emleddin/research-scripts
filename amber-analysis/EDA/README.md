@@ -72,6 +72,22 @@ out as a nice summary file.
 It's useful for getting all a total interaction between the residue and protein
 for evaluating the stability of a mutant.
 
+## Creating Data Tables For Print
+
+### `print-EDA-table.py`
+This script reads in data from `rmagic-EDA-avg-diffs.r` and saves values
+above or below a given threshold in various output formats
+(`latex`, `latex-siunitx`, `csv`, `txt`).
+Additionally, if a protein map is given, it will present the output with the
+appropriate residue labels.
+This is particularly useful if you want to include tables of important values
+in LaTeX.
+> Note: It will likely work for other R scripts, it just assumes data are
+> whitespace delimited with three header columns:
+> ```
+>  Residue   DiffE AvgSTDEV
+> ```
+
 ## Plotting the Processed Data
 
 ### `EDA-bar-comp.py`
