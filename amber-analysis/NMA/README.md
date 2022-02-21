@@ -19,6 +19,14 @@ A python script to plot the contributions of the different normal modes and
 determine which are important for the overall motion of the protein when using
 an NMD file generated through `cpptraj`.
 
+## `fix-cpptraj-NMD.py`
+A python script that will modify the coordinates in an NMD file.
+Sometimes the cpptraj version uses averaged coordinates that look abnormal.
+
+## `fix-cpptraj-NMD-multi.py`
+A version of `fix-cpptraj-NMD.py` that will convert multiple structures at the
+same time using the same criteria.
+
 ## `NMA_plot_mult.py`
 A python script to plot the most relevant normal modes from the `.nmd` file
 generated using `cpptraj` or `VMD`.
