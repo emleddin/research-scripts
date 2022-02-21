@@ -155,7 +155,7 @@ def mc_plot(data,outfile,set_places,custom_cmap):
     ## Do not print generic 'Correlation Matrix' label
     ax.set_title('')
     ## Default DPI is 100, and high-res for publication is 300 minimum
-    plt.savefig(outfile, dpi='600')
+    plt.savefig(outfile, dpi=600)
     plt.close(outfile)
 
 #-------------------#
