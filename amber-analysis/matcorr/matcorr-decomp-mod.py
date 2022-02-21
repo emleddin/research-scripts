@@ -41,9 +41,9 @@ outputfile='./MUT-WT_Correlation_Comparisons.png'
 ## Define your color map
 ## Bcolor is *more* B in B - A
 ## Acolor is *more* A in B - A
-Bcolor = '#998EC3'   # purple
+Bcolor = '#5E3C99'   # purple
 midcolor = '#F7F7F7' # white
-Acolor = '#F1A340'   # orange
+Acolor = '#E66101'   # orange
 
 ## Fix labels if you'd like
 set_places = True

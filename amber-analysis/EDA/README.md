@@ -72,6 +72,12 @@ out as a nice summary file.
 It's useful for getting all a total interaction between the residue and protein
 for evaluating the stability of a mutant.
 
+### `protein-DNA-int.py`
+This script gets a total average for a protein:nucleic interaction.
+It also has the option of doing an `ROI`-based total average.
+If you're using the older `fort.803` and `fort.806` output files, you will have
+to modify the header/column aspects of the script.
+
 ## Creating Data Tables For Print
 
 ### `print-EDA-table.py`
