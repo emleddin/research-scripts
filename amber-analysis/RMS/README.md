@@ -21,6 +21,10 @@ This script will process that data file (regardless of the number of columns)
 and write out a 2-column data set for `Residue` and `Average`.
 Residues will use the numbering in the PDB.
 
+## `diff-rmsf-heatmap.py`
+A python script that creates a Chimera attribute file from averaged differences
+in `cpptraj` RMSF data.
+
 ## `r-gg-rmsd-rmsf.gnu`
 An `R` script for plotting RMSD and RMSF for multiple systems in individual and
 composed figures.

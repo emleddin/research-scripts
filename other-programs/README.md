@@ -9,9 +9,10 @@ My configuration file for `VMD` with things such as using black for labels.
 This should be saved as `~/.vmdrc`.
 
 ## `labeled-gif.sh`
-A bash script for taking individual saved PNG files, labeling them with the
-frame number in the top-right corner, and saving as a continuously looping gif.
-An example usage of this would be QM/MM reactions where you need to modify 
+A bash script for taking individual saved PNG or TGA files, labeling them with
+the frame number in the top-right corner, and saving as a continuously looping
+gif.
+An example usage of this would be QM/MM reactions where you need to modify
 visible bonds on a per-frame basis.
 The script requires [ImageMagick](https://imagemagick.org/script/download.php).
 Each file is assumed to be named similarly, for example:
@@ -31,6 +32,22 @@ after opening Chimera's command line). This should be stored as
 ## `run-caver.sh`
 This is a script for running the command-line [CAVER](http://www.caver.cz/)
 from multiple starting point residues in the same protein.
+
+## `traj-optix.tcl`
+A VMD script for saving transparent images of a trajectory (since MovieMaker
+doesn't allow the render commands to be modified on all devices).
+It requires
+[VMD 1.9.4](https://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD)
+and a GPU, since it uses the internal Tachyon OptiX rendering with a
+transparent background.
+Specify the step size (`incrementby`) and number of frames to save (`fullframe`;
+starting with 1).
+The script will suggest commands for converting files with multiple extensions
+and making a gif (if intended; requires
+[ImageMagick](https://imagemagick.org/script/download.php)]).
+
+To run the script, have it saved in the directory you call `vmd` from and run
+`source traj-optix.tcl` in the VMD console.
 
 ## `traj-pov.tcl`
 A VMD script for saving transparent images of a trajectory (since MovieMaker
