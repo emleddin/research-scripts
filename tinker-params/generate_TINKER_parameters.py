@@ -279,7 +279,9 @@ def get_dihedrals(param_dat, struct_dat, atom_types):
                 saved_phase.append(w_di_type[i].lstrip('phase='))
         #
         ## Combine k, periodicity, and phase into a single line
-        dval.append(list(zip(saved_k, saved_per, saved_phase)))
+        # dval.append(list(zip(saved_k, saved_per, saved_phase)))
+        ## Tinker does k, phase, and periodicity!!!!
+        dval.append(list(zip(saved_k, saved_phase, saved_per)))
         #
     dihedral1 = [atom_types[key] for key in dihedral1a]
     dihedral2 = [atom_types[key] for key in dihedral2a]
@@ -686,7 +688,7 @@ def write_params_noX(param_dat, struct_dat, atom_types,\
         tp_out.write("      #####################################\n")
         tp_out.write("\n\n")
         for i in range(len(imptor1)):
-            tp_out.write("imptors      {:3}  {:3}  {:3}  {:3}           {:6}  {:5}  {:1}\n".format(imptor1[i],\
+            tp_out.write("imptors      {:3}  {:3}  {:3}  {:3}           {:6.3f}  {:5.1f}  {:1}\n".format(imptor1[i],\
              imptor2[i], imptor3[i], imptor4[i], imp_diheds_phik[i], imp_diheds_phase[i], imp_diheds_per[i]))
         tp_out.write("\n\n")
         tp_out.write("            ############################\n")
@@ -710,7 +712,7 @@ def write_params_noX(param_dat, struct_dat, atom_types,\
         ## You might need biotype, but I don't know if it's actually used.
         tp_out.close()
     print(" Always remember to check the new parameters with TINKER analyze.")
-    print(" atom       {:4}  {:2}    {:<4}   missing important terms, especially from solvent.\n")
+    print(" You may be missing important terms, especially from solvent.\n")
 
 def write_params(param_dat, struct_dat, atom_types,\
  bond1, bond2, bond_k, bond_req,\
@@ -871,7 +873,7 @@ def write_params(param_dat, struct_dat, atom_types,\
         tp_out.write("      #####################################\n")
         tp_out.write("\n\n")
         for i in range(len(imptor1)):
-            tp_out.write("imptors      {:3}  {:3}  {:3}  {:3}           {:6}  {:5}  {:1}\n".format(imptor1[i],\
+            tp_out.write("imptors      {:3}  {:3}  {:3}  {:3}           {:6.3f}  {:5.1f}  {:1}\n".format(imptor1[i],\
              imptor2[i], imptor3[i], imptor4[i], imp_diheds_phik[i], imp_diheds_phase[i], imp_diheds_per[i]))
         tp_out.write("\n\n")
         tp_out.write("            ############################\n")
