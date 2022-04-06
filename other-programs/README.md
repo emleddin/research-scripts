@@ -1,5 +1,16 @@
 # other-programs
 
+## `.bash_aliases`
+Aliases and commands you like having on a system.
+To use this file directly, add these lines to your
+`~/.bashrc` or `~/.bash_profile`.
+
+```bash
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+```
+
 ## `.gnuplot`
 A configuration file for `gnuplot` with a `colorsequence` based off of `podo`.
 This should be saved as `~/.gnuplot`.
