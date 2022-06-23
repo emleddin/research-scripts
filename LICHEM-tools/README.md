@@ -23,6 +23,7 @@ Modifying Structures:
 QSM:
 - [`dissected.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#dissectedpy)
 - [`stitching.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#stitchingpy)
+- [`prep-qsm.sh`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#prepqsmsh)
 - [`qsm-energy-diagram.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#qsm-energy-diagrampy)
 
 ## `create-reg.py`
@@ -78,6 +79,13 @@ An explanation of this is in the script itself.
 
 It is *highly* recommended that you test this process with 1 individual frame
 of each to debug it before preparing multiple frames!
+
+## `prep-qsm.sh`
+This script will create the path for QSM from an optimized reactant and
+product.
+It will *not* modify the `regions.inp` file for QSM.
+If you need to rerun this script, be sure to remove all the existing XYZ files
+in the QSM directory.
 
 ## `qsm-energy-diagram.py`
 This script parses the QSM output file and creates figures of plots for the

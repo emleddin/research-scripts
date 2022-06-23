@@ -32,3 +32,6 @@ after idle {
 ## Change to transparent background with POVRay
 render options POV3 {povray +W%w0 +H%h0 -i%s -O%s.png +D +X +A +FN +UA}
 
+## Change to transparent background for OptiX
+set env(VMDOPTIXWRITEALPHA) 1
+
