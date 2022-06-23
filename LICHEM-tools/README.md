@@ -118,7 +118,7 @@ other XYZ. Snip snip! :scissors: :smiley:
 The commands for "Reverse Swapsies" (reactant QM in product MM) are also
 provided as comments.
 
-> *: "Swapsies" was coined by the esteemed [Madison](MadisonB14).
+> *: "Swapsies" was coined by the esteemed [Madison](https://github.com/MadisonB14).
 
 ## `vmd-regions.py`
 This script parses the `regions.inp` file and creates VMD macros for:
