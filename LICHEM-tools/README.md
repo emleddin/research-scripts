@@ -10,7 +10,6 @@ General Tools:
 File conversion and visualization:
 - [`create-reg.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#create-regpy)
 - [`vmd-regions.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#vmd-regionspy)
-- [`lichem-setup.sh`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#lichem-setupsh)
 
 Modifying Structures:
 - [`mda-qm-part1.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#mda-qm-part1py)
@@ -23,8 +22,13 @@ Modifying Structures:
 QSM:
 - [`dissected.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#dissectedpy)
 - [`stitching.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#stitchingpy)
-- [`prep-qsm.sh`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#prepqsmsh)
 - [`qsm-energy-diagram.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#qsm-energy-diagrampy)
+
+Subdirectories:
+- [dir-setup](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools/dir-setup):
+  Scripts for preparing job directories/copying necessary files
+- [submission-scripts](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools/submission-scripts):
+  Scripts for running LICHEM on HPC resources
 
 ## `create-reg.py`
 VMD and LICHEM use one numbering system, whereas TINKER uses another.
@@ -59,33 +63,6 @@ The output of each of these created files are marked by `new_`.
 This script will parse the `LICHM_GaussEnergy` and `LICHM_TINKEREnergy` file
 to separate out the QM and MM energy given in the LICHEM log.
 These energies can be converted to different units, such as eV and kcal/mol.
-
-## `lichem-setup.sh`
-This bash script is intended for multi-system preparation, starting from a PDB
-structure.
-It is written for 2 separate systems within a base folder, and it will:
-- Convert the PDB to a Tinker XYZ
-- Create the LICHEM `regions.inp` and Gaussian `BASIS` files
-- Convert the Tinker XYZ to LICHEM, creating `connect.inp` and `xyzfile.xyz`
-- Write a `.vmd` file with information from the `regions.inp` file
-- Copy all the necessary files for running a single point calculation to one
-  subfolder
-
-The skeleton for `create-reg.py` needs to be modified for your system!
-Additionally, both `create-reg.py` and the chosen
-[PDBXYZ](https://github.com/emleddin/pdbxyz-xyzpdb)
-script need to be modified to allow system arguments.
-An explanation of this is in the script itself.
-
-It is *highly* recommended that you test this process with 1 individual frame
-of each to debug it before preparing multiple frames!
-
-## `prep-qsm.sh`
-This script will create the path for QSM from an optimized reactant and
-product.
-It will *not* modify the `regions.inp` file for QSM.
-If you need to rerun this script, be sure to remove all the existing XYZ files
-in the QSM directory.
 
 ## `qsm-energy-diagram.py`
 This script parses the QSM output file and creates figures of plots for the

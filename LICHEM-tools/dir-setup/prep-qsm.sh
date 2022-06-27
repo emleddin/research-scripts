@@ -37,7 +37,7 @@ NLINE=$((${NATOM}+2))
 #------------#
 
 # Copy the requisite files
-cp ${RXT_DIR}/amber_ff14SB_OL15_polk_mg.prm \
+cp ${RXT_DIR}/${PRM} \
    ${RXT_DIR}/BASIS \
    ${RXT_DIR}/connect.inp \
    ${RXT_DIR}/regions.inp \
@@ -45,8 +45,8 @@ cp ${RXT_DIR}/amber_ff14SB_OL15_polk_mg.prm \
    ${RXT_DIR}/vmd-selections.vmd \
    ${QSM_DIR}/.
 
-# Don't copy regions.inp to QSM if it was already modified
-#cp ${RXT_DIR}/amber_ff14SB_OL15_polk_mg.prm \
+# Don't re-copy regions.inp if it was already modified
+#cp ${RXT_DIR}/${PRM} \
 #   ${RXT_DIR}/BASIS \
 #   ${RXT_DIR}/connect.inp \
 #   ${RXT_DIR}/tinker.key \
@@ -78,7 +78,7 @@ lichem -splitpath -b ${BEADS} -p BeadStartStruct.xyz
 # Save the original path
 cp BeadStartStruct.xyz initial-path.xyz
 
-# Reminder
+# Reminders
 printf " -----Reminder: View BurstStruct.xyz before optimizing!----- \n"
 printf " -----Reminder: Change your regions.inp file for QSM!!!----- \n"
 printf " -----Reminder: You still need a queue script! :) ----- \n"
