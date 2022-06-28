@@ -6,6 +6,7 @@ This directory contains a number of scripts for working with
 General Tools:
 - [`get-energies.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#get-energiespy)
 - [`qm-pdb-map.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#qm-pdb-mappy)
+- [`regions-updater.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#regionsupdaterpy)
 
 File conversion and visualization:
 - [`create-reg.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#create-regpy)
@@ -67,6 +68,19 @@ These energies can be converted to different units, such as eV and kcal/mol.
 ## `qsm-energy-diagram.py`
 This script parses the QSM output file and creates figures of plots for the
 initial and final reaction coordinates.
+
+## `regions-updater.py`
+This script defines a python class for `regions.inp` files.
+You can use it to change the criteria of a regions file, or clean up the 
+formatting.
+For example, it can update DFP criteria to be used for restrained or 
+unrestrained QSM (and vice versa).
+
+Example class usage to prepare for QSM:
+```python3
+params = LICHEMParameters("regions.inp")
+params.use_qsm(restrain_QSM=False, beads=13)
+```
 
 ## `stitching.py`
 This script creates a complete `BeadStartStruct.xyz` from two individual

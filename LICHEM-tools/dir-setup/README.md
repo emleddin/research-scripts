@@ -3,9 +3,9 @@
 This directory contains a number of scripts for preparing job directories
 for [LICHEM](https://github.com/CisnerosResearch/LICHEM).
 
-# General
+## General
 
-## `lichem-setup.sh`
+### `lichem-setup.sh`
 This bash script is intended for multi-system preparation, starting from a PDB
 structure.
 It is written for 2 separate systems within a base folder, and it will:
@@ -24,6 +24,11 @@ An explanation of this is in the script itself.
 
 It is *highly* recommended that you test this process with 1 individual frame
 of each to debug it before preparing multiple frames!
+
+### `cont-dfp.sh`
+This script will copy files from a partially optimized structure to
+continue the optimization.
+An example use is the job not finishing at the wallclock time.
 
 ## For QSM
 
