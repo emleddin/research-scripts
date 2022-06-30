@@ -154,15 +154,33 @@ class LICHEMParameters:
                     self.beads = append_val(line)
                 elif "box_size:" in lsl:
                     self.box_size = append_val(line)
+                    if len(self.box_size.split()) > 3:
+                        print("\nWARNING: Read box size has more than 3 "
+                              "coordinates (XYZ).\n"
+                              f"         Check that {self.box_size} "
+                              "was intentional.")
+                    elif len(self.box_size.split()) < 3:
+                        print("\nWARNING: Read box size has less than 3 "
+                              "coordinates (XYZ).\n"
+                              f"         Check that {self.box_size} "
+                              "was intentional.")
                 elif "calculation_type:" in lsl:
                     self.calculation_type = append_val(line)
                 elif "electrostatics:" in lsl:
                     self.electrostatics = append_val(line)
                     # TODO: Verify AMBER is acceptable
-                    if self.electrostatics in ("AMBER", "CHARGES"):
+                    if self.electrostatics.lower() in ("charges", "charge", 
+                      "point-charge"):
+                        print("\nNOTE: Setting LREC_exponent to 2 "
+                                "because {self.electrostatics} was given "
+                                "for electrostatics.")
                         self.lrec_exponent = 2
-                    elif self.electrostatics == "AMOEBA":
+                    elif self.electrostatics.lower() == "amoeba":
+                        print("\nNOTE: Setting LREC_exponent to 3 "
+                                "because {self.electrostatics} was given "
+                                "for electrostatics.")
                         self.lrec_exponent = 3
+                    # "gem" case?
                 elif "ensemble:" in lsl:
                     self.box_size = append_val(line)
                 elif "eq_steps:" in lsl:
@@ -413,6 +431,10 @@ class LICHEMParameters:
         #       "      NEB_atoms, for those atoms involved in the "
         #       "reaction.\n")
         return self
+    #
+    # TODO: Add SP, FREQ, OPT, STEEP, NEB, PIMC, and FBNEB configurations
+    # TODO: Standardize yes/true vs no/false responses
+    # TODO: Verify that given values are typed correctly (float, int, etc.)
     #
     def write(self, outfile="updated_regions.inp"):
         """

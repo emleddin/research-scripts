@@ -5,6 +5,7 @@ This directory contains a number of scripts for working with
 
 General Tools:
 - [`get-energies.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#get-energiespy)
+- [`relative-energy-diagram.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#relative-energy-diagrampy)
 - [`qm-pdb-map.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#qm-pdb-mappy)
 - [`regions-updater.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#regionsupdaterpy)
 
@@ -68,6 +69,11 @@ These energies can be converted to different units, such as eV and kcal/mol.
 ## `qsm-energy-diagram.py`
 This script parses the QSM output file and creates figures of plots for the
 initial and final reaction coordinates.
+
+## `relative-energy-diagram.py`
+This script creates a relative energy diagram from a list of energies.
+Dimensions are scaled to the requested `out_width` and `out_height`, 
+but the font size should be increased or larger output sizes.
 
 ## `regions-updater.py`
 This script defines a python class for `regions.inp` files.
