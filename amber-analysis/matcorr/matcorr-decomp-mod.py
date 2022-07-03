@@ -180,7 +180,7 @@ anticorr=plt.subplot(2,2,4)
 
 ## Define the custom color map
 test = mpl.colors.LinearSegmentedColormap.from_list('test',[Acolor,midcolor,Bcolor])
-cm.register_cmap(name='test')
+cm.register_cmap(cmap=test)
 
 ### Note: these will always have 1 extra row/column with the max!!
 #corr_shifted_cmap=shiftedColorMap(cm.bwr_r,0.0,1 - Corr_Diff.max() / (Corr_Diff.max() + abs(Corr_Diff.min())),1.0,'shiftedcorr')

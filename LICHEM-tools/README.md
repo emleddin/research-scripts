@@ -14,6 +14,7 @@ File conversion and visualization:
 - [`vmd-regions.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#vmd-regionspy)
 
 Modifying Structures:
+- [`lichem-atom-removal.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#lichem-atom-removalpy)
 - [`mda-qm-part1.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#mda-qm-part1py)
 - [`mda-qm-part2.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#mda-qm-part2py)
 - [`mda-recenter-pdb.py`](https://github.com/emleddin/research-scripts/tree/main/LICHEM-tools#mda-recenter-pdbpy)
@@ -65,6 +66,13 @@ The output of each of these created files are marked by `new_`.
 This script will parse the `LICHM_GaussEnergy` and `LICHM_TINKEREnergy` file
 to separate out the QM and MM energy given in the LICHEM log.
 These energies can be converted to different units, such as eV and kcal/mol.
+
+## `lichem-atom-removal.py`
+This script will parse the `BASIS`, `connect.inp`, `regions.inp`, and
+`xyzfile.xyz` to remove an atom (or atoms) from your system using its 
+`LICHEM_ID` (aka, what identifies it in the `regions.inp` file).
+If you do not use the `STO-2G` pseudopotential, or have multiply defined
+pseudopotential lines, `BASIS` will need to be modified.
 
 ## `qsm-energy-diagram.py`
 This script parses the QSM output file and creates figures of plots for the
