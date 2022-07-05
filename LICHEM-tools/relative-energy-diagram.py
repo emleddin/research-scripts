@@ -88,11 +88,11 @@ def get_relative_energy(energies, e_units, rel_units):
         rel_energies = [rel / au2kcal for rel in rel_energies]
     elif e_units.lower() == "au" and rel_units.lower() == "ev":
         rel_energies = [rel * har2eV for rel in rel_energies]
-    elif e_units.lower() == "eV" and rel_units.lower() == "au":
+    elif e_units.lower() == "ev" and rel_units.lower() == "au":
         rel_energies = [rel / har2eV for rel in rel_energies]
     elif e_units.lower() in ("kcal", "kcal/mol") and rel_units.lower() == "ev":
         rel_energies = [rel * kcal2eV for rel in rel_energies]
-    elif e_units.lower() == "eV" and rel_units.lower() in ("kcal", "kcal/mol"):
+    elif e_units.lower() == "ev" and rel_units.lower() in ("kcal", "kcal/mol"):
         rel_energies = [rel / kcal2eV for rel in rel_energies]
     return rel_energies, rel_units
 
