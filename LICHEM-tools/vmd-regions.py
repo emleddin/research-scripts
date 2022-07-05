@@ -33,7 +33,7 @@ def readreg(regions_file):
             "lrec_cut:", "lrec_exponent:",
             "max_stepsize:", "max_opt_steps:", "max_qm_steps:",
             "mm_opt_cut:", "mm_opt_tolerance:", "mm_type:",
-            "neb_atoms:", "nqsm",
+            "neb_atoms:", "nqsm:",
             "opt_stepsize:", "pbc:", "potential_type:", "pressure:",
             "prod_steps:", "pseudobond_atoms:",
             "qm_atoms", "qm_basis:", "qm_charge:", "qm_max_force_tol:",

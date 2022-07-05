@@ -6,6 +6,11 @@ import pandas as pd
 orig_pdb="WT_protein_system_frame_23456.pdb"
 tink_xyz="WT_protein_system_frame_23456_convert.xyz"
 
+## Alternative: using system arguments
+## The script itself is sys.argv[0]
+# orig_pdb = sys.argv[1]
+# tink_xyz = sys.argv[2]
+
 ## Atom number for center of active atom shell
 shell_center=1234
 ## Did you use the index from VMD for the shell_center? If yes, set True
@@ -18,7 +23,7 @@ criteria="tight"
 ## Set the QM parameters for the resulting regions file!
 method="B3LYP"
 mem="80 GB"
-charge="-4"
+charge="-2"
 spin="1"
 
 ## Set the regular basis level and the higher basis level for atoms defined
@@ -258,8 +263,9 @@ def get_box(orig_pdb):
     pdb = pmd.load_file(orig_pdb)
     save_box = pdb.get_box()
     if save_box.any() == None:
-        print("Oopsie! This PDB didn't contain box information. Setting coordinates to 0\n\
- for right now. Please find this information and update your regions file.\n")
+        print("Oopsie! This PDB didn't contain box information. "
+              "Setting coordinates to 0\nfor right now. "
+              "Please find this information and update your regions file.\n")
         x_box = 0.
         y_box = 0.
         z_box = 0.
@@ -288,7 +294,8 @@ def load_XYZ(orig_pdb, tink_xyz):
     system : MDAnalysis.core.universe.Universe
         The Tinker XYZ information mapped onto a PDB topology.
     """
-    system = mda.Universe(orig_pdb, tink_xyz, format="TXYZ", dt=1.0, in_memory=True)
+    system = mda.Universe(orig_pdb, tink_xyz, format="TXYZ", dt=1.0, 
+                          in_memory=True)
     #
     ## Remove the segment IDs (aka `SYSTEM`) for prettier AtomGroup printing
     for atom in system.atoms:
@@ -335,35 +342,13 @@ def make_regions(x_box, y_box, z_box, all_QM, all_PB, all_BA, all_FR, electro,\
         An atom group of all of the selected boundary atoms.
     all_FR : list
         A list of all of the frozen atoms.
-
-    Returns
-    -------
-    regions.inp_backup : txt
-        A complete `regions.inp` file named with `backup` to avoid being
-        overwritten by `lichem -convert`.
     """
     ##
     electro = electro.upper()
     criteria = criteria.lower()
     #
     nc = 10 ## Number of columns to print
-    QM_len = (len(all_QM)-(len(all_QM)%(nc)))+(nc)
-    QM_range = QM_len//(nc)
-    print_QM = [all_QM.atoms.ix[i*(nc):i*(nc)+(nc)] for i in range(QM_range)]
     #
-    PB_len = (len(all_PB)-(len(all_PB)%(nc)))+(nc)
-    PB_range = PB_len//(nc)
-    print_PB = [all_PB.atoms.ix[i*(nc):i*(nc)+(nc)] for i in range(PB_range)]
-    #
-    BA_len = (len(all_BA)-(len(all_BA)%(nc)))+(nc)
-    BA_range = BA_len//(nc)
-    print_BA = [all_BA.atoms.ix[i*(nc):i*(nc)+(nc)] for i in range(BA_range)]
-    #
-    FR_len = (len(all_FR)-(len(all_FR)%(nc)))+(nc)
-    FR_range = FR_len//(nc)
-    print_FR = [all_FR[i*(nc):i*(nc)+(nc)] for i in range(FR_range)]
-    #
-    ## Create the regions file
     with open("regions.inp_backup", "w+") as reg_out:
         reg_out.write("Potential_type: QMMM\n")
         reg_out.write("QM_type: g16\n")
@@ -400,7 +385,7 @@ def make_regions(x_box, y_box, z_box, all_QM, all_PB, all_BA, all_FR, electro,\
         reg_out.write("max_opt_steps: 30\n")
         reg_out.write("max_qm_steps: 15\n")
         reg_out.write("PBC: Yes\n")
-        reg_out.write("Box_size: {:.6f} {:.6f} {:.6f}\n".format(x_box, y_box, z_box))
+        reg_out.write(f"Box_size: {x_box:.6f} {y_box:.6f} {z_box:.6f}\n")
         reg_out.write("Use_LREC: Yes\n")
         reg_out.write("LREC_cut: 25.0\n")
         if electro == "AMBER":
@@ -409,14 +394,42 @@ def make_regions(x_box, y_box, z_box, all_QM, all_PB, all_BA, all_FR, electro,\
             reg_out.write("LREC_exponent: 3\n")
         reg_out.write("Use_Ewald: Yes\n")
         reg_out.write("Keep_files: Yes\n")
-        reg_out.write("QM_atoms: {}\n".format(len(all_QM)))
-        reg_out.write('\n'.join(' '.join(map(str,sl)) for sl in print_QM) + '\n')
-        reg_out.write("Pseudobond_atoms: {}\n".format(len(all_PB)))
-        reg_out.write('\n'.join(' '.join(map(str,sl)) for sl in print_PB) + '\n')
-        reg_out.write("Boundary_atoms: {}\n".format(len(all_BA)))
-        reg_out.write('\n'.join(' '.join(map(str,sl)) for sl in print_BA) + '\n')
-        reg_out.write("Frozen_atoms: {}\n".format(len(all_FR)))
-        reg_out.write('\n'.join(' '.join(map(str,sl)) for sl in print_FR))
+        reg_out.write(f"QM_atoms: {len(all_QM)}\n")
+        # These are atom groups
+        for i, item in enumerate(all_QM, start=1):
+            # If i is divisible by number of columns or last item
+            if (i) % nc == 0 or item == all_QM[-1]:
+                reg_out.write(f"{item.ix}\n")
+            else:
+                reg_out.write(f"{item.ix} ")
+        # Write PB atoms
+        reg_out.write(f"Pseudobond_atoms: {len(all_PB)}\n")
+        for i, item in enumerate(all_PB, start=1):
+            # If i is divisible by number of columns or last item
+            if (i) % nc == 0 or item == all_PB[-1]:
+                reg_out.write(f"{item.ix}\n")
+            else:
+                reg_out.write(f"{item.ix} ")
+        # Write BA
+        reg_out.write(f"Boundary_atoms: {len(all_BA)}\n")
+        for i, item in enumerate(all_BA, start=1):
+            # If i is divisible by number of columns or last item
+            if (i) % nc == 0 or item == all_BA[-1]:
+                reg_out.write(f"{item.ix}\n")
+            else:
+                reg_out.write(f"{item.ix} ")
+        # Write frozen
+        # This is a list
+        reg_out.write(f"Frozen_atoms: {len(all_FR)}\n")
+        for i, item in enumerate(all_FR, start=1):
+            # If last item
+            if item == all_FR[-1]:
+                reg_out.write(f"{item}")
+            # Else if i is divisible by number of columns
+            elif (i) % nc == 0:
+                reg_out.write(f"{item}\n")
+            else:
+                reg_out.write(f"{item} ")
         reg_out.close()
 
 def map_BASIS(all_QM, all_PB):
@@ -516,59 +529,51 @@ def make_BASIS(basis_df, all_QM, all_HB, all_PB, reg_basis_level,
     with open("BASIS", "w+") as b_out:
     #---- Regular Basis
         ## Write indices of those with regular BASIS level in groups of 8
-        ## If there is no remainder:
-        if len(reg_list) % 8 == 0:
-            for i in range(int(len(reg_list)/8)):
-                b_out.write(" ".join(map(str,reg_list[i*8:(i+1)*8])) + "  0\n")
+        for i, item in enumerate(reg_list, start=1):
+        # If i is divisible by 8 or last item
+            if i % 8 == 0 or item == reg_list[-1]:
+                b_out.write(f"{item}  0\n")
                 b_out.write("{}\n".format(reg_basis_level))
                 b_out.write("****\n")
-        ## If there is a remainder:
-        else:
-            for i in range(int(len(reg_list)/8+1)):
-                b_out.write(" ".join(map(str,reg_list[i*8:(i+1)*8])) + "  0\n")
-                b_out.write("{}\n".format(reg_basis_level))
-                b_out.write("****\n")
+            ## If there is a remainder:
+            else:
+                b_out.write(f"{item}")
     #---- Higher Basis
-        ## Write indices of those with higher BASIS level in groups of 8
-        if len(high_list) % 8 == 0:
-            for i in range(int(len(high_list)/8)):
-                b_out.write(" ".join(map(str,high_list[i*8:(i+1)*8])) + "  0\n")
+        # ## Write indices of those with higher BASIS level in groups of 8
+        for i, item in enumerate(high_list, start=1):
+        # If i is divisible by 8 or last item
+            if i % 8 == 0 or item == high_list[-1]:
+                b_out.write(f"{item}  0\n")
                 b_out.write("{}\n".format(high_basis_level))
                 b_out.write("****\n")
-        ## If there is a remainder:
-        else:
-            for i in range(int(len(high_list)/8+1)):
-                b_out.write(" ".join(map(str,high_list[i*8:(i+1)*8])) + "  0\n")
-                b_out.write("{}\n".format(high_basis_level))
-                b_out.write("****\n")
+            ## If there is a remainder:
+            else:
+                b_out.write(f"{item}")
     #---- PB Atoms
         ## Part 1: write indices of PB atoms in groups of 12
-        ## If there is no remainder:
-        if len(pb_list) % 12 == 0:
-            for i in range(int(len(pb_list)/12)):
-                b_out.write(" ".join(map(str,pb_list[i*12:(i+1)*12])) + "  0 {}\n".format(PB1.rstrip()))
-                b_out.write("****\n\n")
-        ## If there is a remainder:
-        else:
-            for i in range(int(len(pb_list)/12+1)):
-                b_out.write(" ".join(map(str,pb_list[i*12:(i+1)*12])) + "  0 {}\n".format(PB1.rstrip()))
-                b_out.write("****\n\n")
+        for i, item in enumerate(high_list, start=1):
+        # If i is divisible by 12 or last item
+            if i % 12 == 0 or item == high_list[-1]:
+                b_out.write(f"{item}  0 {PB1.rstrip()}\n")
+                b_out.write("****\n")
+            ## If there is a remainder:
+            else:
+                b_out.write(f"{item}")
         ## Part 2: rewrite indices with additional info
-        ## If there is no remainder:
-        if len(pb_list) % 12 == 0:
-            for i in range(int(len(pb_list)/12)):
-                b_out.write(" ".join(map(str,pb_list[i*12:(i+1)*12])) + "  0\n")
-                b_out.write("{}\n\n".format(PB2.rstrip()))
-        ## If there is a remainder:
-        else:
-            for i in range(int(len(pb_list)/12+1)):
-                b_out.write(" ".join(map(str,pb_list[i*12:(i+1)*12])) + "  0\n")
-                b_out.write("{}\n\n".format(PB2.rstrip()))
+        for i, item in enumerate(high_list, start=1):
+        # If i is divisible by 12 or last item
+            if i % 12 == 0 or item == high_list[-1]:
+                b_out.write(f"{item}  0\n")
+                b_out.write(f"{PB2.rstrip()}\n\n")
+            ## If there is a remainder:
+            else:
+                b_out.write(f"{item}")
         b_out.close()
         if len(pb_list) > 12:
-            print("You may need to check the PB section formatting in the BASIS file.",
-            "I did the best I could, but more than 12 pseudobond atoms gets funky.\n",
-            sep="\n")
+            print("You may need to check the PB section formatting in the "
+                  "BASIS file.\n"
+                  "I did the best I could, but more than 12 pseudobond atoms "
+                  "gets funky.\n")
     return basis_df
 
 #-------------- Run the program -------------#
