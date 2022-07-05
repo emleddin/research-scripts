@@ -29,18 +29,22 @@ class GaussianGENFile:
 
     Methods
     -------
-    read(basisfile="BASIS")
+    read(read_file="BASIS")
         Read in the BASIS file.
-    write(out_dir="./output", out_basis="BASIS")
+    write(write_dir="./output", write_file="BASIS")
         Write out the BASIS file.
     """
-    # def __init__(self, basisfile="BASIS"):
-    #     self.read()
-    def read(self, basisfile="BASIS"):
+    def __init__(self, basisfile="BASIS", out_dir="./output", outfile="BASIS"):
+        self.basisfile = basisfile
+        self.out_dir = out_dir
+        self.outfile = outfile
+        return
+    def read(self, read_file=None):
         '''
         Parse the Gaussian basis file used with the `QM_basis: GEN` argument.
         '''
-        self.basisfile = basisfile
+        if read_file is None:
+            read_file = self.basisfile
         self.basis_atoms = {}
         #
         def b_rstrip(orig_string, replacement='\s'):
@@ -67,7 +71,7 @@ class GaussianGENFile:
         skip_next_line = False
         self.pseudo_pot_info = []
         #
-        with open(self.basisfile, 'r+') as f:
+        with open(read_file, 'r+') as f:
             lines = f.readlines()
             for line_pointer, line in enumerate(lines):
                 # Store next line (if it exists)
@@ -130,23 +134,25 @@ class GaussianGENFile:
     #     return self
     #
     # TODO: Write out a new BASIS file
-    def write(self, out_dir="./output", out_basis="BASIS"):
+    def write(self, write_dir=None, write_file=None):
         """
         Write the GEN basis file.
 
         Parameters
         ----------
-        out_dir : str
+        write_dir : str
             Output directory.
-        out_basis : str
+        write_file : str
             Name of the file to write to.
         """
-        self.out_dir = out_dir
-        self.out_basis = out_basis
+        if write_dir is None:
+            write_dir = self.out_dir
+        if write_file is None:
+            write_file = self.outfile
         # Specify output path
-        self.out_path = self.out_dir + '/' + self.out_basis
+        self.out_path = write_dir + '/' + write_file
         # Create the output directory (no error if it doesn't exist)
-        pathlib.Path(self.out_dir).mkdir(parents=True, exist_ok=True)
+        pathlib.Path(write_dir).mkdir(parents=True, exist_ok=True)
         # Write to file
         # If n_connections is not 0, put a space before connections
         with open(self.out_path, 'w+') as f:
@@ -200,26 +206,30 @@ class LICHEMConnectFile:
 
     Methods
     -------
-    read(confile="connect.inp")
+    read(read_file="connect.inp")
         Read in the connectivity file.
-    write(out_dir="./output", out_con="connect.inp")
+    write(write_dir="./output", write_file="connect.inp")
         Write out the connectivity file.
     """
-    # def __init__(self, confile="connect.inp"):
-        #     self.read()
-    #
-    def read(self, confile="connect.inp"):
+    def __init__(self, confile="connect.inp", out_dir="./output",
+                 outfile="connect.inp"):
+        self.confile = confile
+        self.out_dir = out_dir
+        self.outfile = outfile
+        return
+    def read(self, read_file=None):
         """
         Parse the LICHEM connectivity file.
         """
-        self.confile = confile
+        if read_file is None:
+            read_file = self.confile
         # Extend to 6 possible connections
         col_names = ['LICHEM_ID', 'atom_name', 'tinker_type', 'mass', 'charge',
                     'n_connections', 'con_a', 'con_b', 'con_c', 'con_d',
                     'con_e', 'con_f']
         # Read in the connectivity file, keep NAs blank
         self.con_df = pd.read_csv(
-                    self.confile,
+                    read_file,
                     low_memory=False,
                     names = col_names,
                     delim_whitespace=True, na_filter=False)
@@ -228,42 +238,32 @@ class LICHEMConnectFile:
                             'con_e', 'con_f']].agg(' '.join, axis=1)
         # Strip trailing whitespace in CT column
         self.con_df['CT'] = self.con_df['CT'].map(lambda x: x.rstrip())
-        # Save all information to lists
         #
-        # self.con_df = con_df[['LICHEM_ID', 'atom_name', 'tinker_type',
-        #                       'mass', 'charge', 'n_connections', 'CT']]
-        #
-        # self.lichem_index = con_df['LICHEM_ID']
-        # self.atom_name = con_df['atom_name'].to_list()
-        # self.tinker_type = con_df['tinker_type'].to_list()
-        # self.mass = con_df['mass'].to_list()
-        # self.charge = con_df['charge'].to_list()
-        # self.n_connections = con_df['n_connections'].to_list()
-        # self.connected_atoms = con_df['CT'].to_list()
-        # print(self.con_df)
         return self
     #
     # TODO: Remove the atom indices you think you should
     # def remove():
     #     return self
     #
-    def write(self, out_dir="./output", out_con="connect.inp"):
+    def write(self, write_dir=None, write_file=None):
         """
         Write the LICHEM connectivity file.
 
         Parameters
         ----------
-        out_dir : str
+        write_dir : str
             Output directory.
-        out_con : str
+        write_file : str
             Name of the file to write to.
         """
-        self.out_dir = out_dir
-        self.out_con = out_con
+        if write_dir is None:
+            write_dir = self.out_dir
+        if write_file is None:
+            write_file = self.outfile
         # Specify output path
-        self.out_path = self.out_dir + '/' + self.out_con
+        self.out_path = write_dir + '/' + write_file
         # Create the output directory (no error if it doesn't exist)
-        pathlib.Path(self.out_dir).mkdir(parents=True, exist_ok=True)
+        pathlib.Path(write_dir).mkdir(parents=True, exist_ok=True)
         # Write to file
         # If n_connections is not 0, put a space before connections
         with open(self.out_path, 'w+') as f:
@@ -272,24 +272,6 @@ class LICHEMConnectFile:
                 r.LICHEM_ID, r.atom_name, r.tinker_type, r.mass, r.charge, \
                 r.n_connections,
                 (' '+r.CT if r.CT != '' else '')))
-        #
-        # All of these leave trailing spaces after if n_connections == 0
-        #
-        # np.savetxt(out_path, self.con_df.values,
-        #            fmt='%d %s %d %.2f %.4f %d %s')
-        #
-        # with open(out_path, 'w+') as f:
-        #     con_string = self.con_df.to_string(header=False, index=False)
-        #     f.write(con_string)
-        #
-        # with open(out_path, 'w+') as f:
-        #     con_string = self.con_df.to_string(col_space=0, header=False,
-        #                                        index=False)
-        #     f.write(con_string)
-        #
-        # self.con_df.to_csv(out_path, index=False,
-        #                    header=False, sep=' ', quotechar='',
-        #                    line_terminator='\n')
         return
 
 
@@ -299,25 +281,32 @@ class LICHEMRegionsFile:
 
     Methods
     -------
+    read(read_file="regions.inp")
+        Parse the regions file and set initial values.
     use_dfp(DFP_criteria="tight")
         Set parameters for DFP optimization.
     use_qsm(restrain_QSM=True, beads=3)
         Set parameters for restrained or unrestrained QSM.
-    write(outfile="updated_regions.inp")
+    write(write_dir="./output", write_file="regions.inp")
         Write out an updated parameter file.
     """
-    # def __init__(self, regions_file="regions.inp"):
-    #     return
-    def read(self, regions_file="regions.inp"):
+    def __init__(self, regfile="regions.inp", out_dir="./output",
+                 outfile="regions.inp"):
+        self.regions_file = regfile
+        self.out_dir = out_dir
+        self.outfile = outfile
+        return
+    def read(self, read_file=None):
         '''
         Parse the LICHEM regions file.
 
         Parameters
         ----------
-        regions_file : str
+        read_file : str
             The file name of the LICHEM regions file.
         '''
-        self.regions_file = regions_file
+        if read_file is None:
+            read_file = self.regions_file
         # Set up option to append value
         def append_val(line):
             """Save keyword option specified on one-line."""
@@ -325,7 +314,7 @@ class LICHEMRegionsFile:
             var = var.strip()
             return var
         #
-        f = open(self.regions_file, 'r')
+        f = open(read_file, 'r')
         reg_lines = f.readlines()
         #
         LICHEM_reg_keywords = [
@@ -731,21 +720,26 @@ class LICHEMRegionsFile:
     # TODO: Standardize yes/true vs no/false responses
     # TODO: Verify that given values are typed correctly (float, int, etc.)
     #
-    def write(self, out_dir="./output", out_reg="regions.inp"):
+    def write(self, write_dir=None, write_file=None):
         """
         Write the LICHEM regions file.
 
         Parameters
         ----------
-        out_dir : str
+        write_dir : str
             Output directory.
-        out_reg : str
+        write_file : str
             Name of the file to write to.
         """
-        self.out_dir = out_dir
-        self.out_reg = out_reg
+        if write_dir is None:
+            write_dir = self.out_dir
+        if write_file is None:
+            write_file = self.outfile
         # Specify output path
-        self.out_path = self.out_dir + '/' + self.out_reg
+        self.out_path = write_dir + '/' + write_file
+        #
+        # Create the output directory (no error if it doesn't exist)
+        pathlib.Path(write_dir).mkdir(parents=True, exist_ok=True)
         #
         def check_attr(ofile_name, attribute):
             """Check whether the attribute is assigned."""
@@ -861,27 +855,30 @@ class LICHEMXYZFile:
 
     Methods
     -------
-    read(xyzfile="xyzfile.xyz)
+    read(read_file="xyzfile.xyz")
         Read in the XYZ file.
-    write(out_dir="./output", out_xyz="xyzfile.xyz")
+    write(write_dir="./output", write_file="xyzfile.xyz")
         Write out the XYZ file.
     """
-    # def __init__(self, xyzfile="xyzfile.xyz"):
-    #     self.read()
-    #     return
-    #
     # TODO: Only read last frame!
-    def read(self, xyzfile="xyzfile.xyz"):
+    def __init__(self, xyzfile="xyzfile.xyz", out_dir="./output",
+                 outfile="xyzfile.xyz"):
+        self.xyzfile = xyzfile
+        self.out_dir = out_dir
+        self.outfile = outfile
+        return
+    def read(self, read_file=None):
         """
         Parse the LICHEM XYZ file.
         """
-        self.xyzfile = xyzfile
+        if read_file is None:
+            read_file = self.xyzfile
         # Read firstline for number of atoms
-        self.natom = open(self.xyzfile, 'r+').readlines()[0].strip()
+        self.natom = open(read_file, 'r+').readlines()[0].strip()
         # Read in the XYZ file
         col_names = ["element", "x_coord", "y_coord", "z_coord"]
         self.xyz_df = pd.read_csv(
-                self.xyzfile,
+                read_file,
                 low_memory=False,
                 names = col_names,
                 delim_whitespace=True, na_filter=False, skiprows=1)
@@ -896,23 +893,25 @@ class LICHEMXYZFile:
         # print(self.xyz_df)
         return self
     #
-    def write(self, out_dir="./output", out_xyz="xyzfile.xyz"):
+    def write(self, write_dir=None, write_file=None):
         """
         Write the LICHEM XYZ file.
 
         Parameters
         ----------
-        out_dir : str
+        write_dir : str
             Output directory.
-        out_xyz : str
+        write_file : str
             Name of the file to write to.
         """
-        self.out_dir = out_dir
-        self.out_xyz = out_xyz
+        if write_dir is None:
+            write_dir = self.out_dir
+        if write_file is None:
+            write_file = self.outfile
         # Specify output path
-        self.out_path = self.out_dir + '/' + self.out_xyz
+        self.out_path = write_dir + '/' + write_file
         # Create the output directory (no error if it doesn't exist)
-        pathlib.Path(self.out_dir).mkdir(parents=True, exist_ok=True)
+        pathlib.Path(write_dir).mkdir(parents=True, exist_ok=True)
         #
         with open(self.out_path, 'w+') as f:
             # Write the number of atoms
@@ -1201,21 +1200,31 @@ class LICHEMSystem:
         #
         return self
     #
-    def write(self):
+    def write(self, out_dir="./output"):
         """
         Write all of the LICHEM system files.
         """
+        self.out_dir = out_dir
         # Rewrite the files
-        self.basis.write()
-        self.connectivity.write()
-        self.regions.write()
-        self.xyz.write()
+        self.basis.write(write_dir=out_dir)
+        self.connectivity.write(write_dir=out_dir)
+        self.regions.write(write_dir=out_dir)
+        self.xyz.write(write_dir=out_dir)
         return
 
 # TODO: Create new Tinker XYZ?
 # TODO: Update BASIS_verification.txt?
 
 # ------------------------------------------------------------------------ #
+
+# Examples:
+# basis = GaussianGENFile(outfile="BASIS").read()
+# basis.write(write_dir="./funky", write_file="WHY")
+# connectivity = LICHEMConnectFile()
+# c = connectivity.read()
+# c.write()
+# w = LICHEMSystem(basis, connectivity, regions, xyz).remove_atoms([2, 3])
+# w.write(out_dir="./updated-files")
 
 # start = time.time()
 
@@ -1236,8 +1245,6 @@ xyz = LICHEMXYZFile().read()
 # xyz.write()
 
 # List of atoms to remove (using LICHEM_ID!!!!)
-# remove_me = [5]
-# remove_me = [84642, 84646]
 remove_me = [1234]
 
 # Create a LICHEM system, remove atoms, and then write the new output.
